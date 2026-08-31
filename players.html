@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Clovelly Gropers Cricket Club player profiles, statistics and club records." />
+
+  <title>Players & Records | Clovelly Gropers Cricket Club</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="spotlight-update.css" />
+
+  <style>
+    .players-page {
+      background: #f5f7fa;
+      min-height: 100vh;
+    }
+
+    .players-hero {
+      background: linear-gradient(135deg, #021c35, #07579f);
+      color: white;
+      padding: 70px 20px;
+      text-align: center;
+    }
+
+    .players-hero h1 {
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: clamp(42px, 7vw, 72px);
+      margin: 0;
+      text-transform: uppercase;
+      line-height: 0.95;
+    }
+
+    .players-hero h1 span {
+      color: #168cff;
+    }
+
+    .players-hero p {
+      max-width: 700px;
+      margin: 20px auto 0;
+      color: #d9e7f5;
+    }
+
+    .players-container {
+      width: min(1100px, 92%);
+      margin: 0 auto;
+      padding: 55px 0;
+    }
+
+    .section-heading {
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 38px;
+      text-transform: uppercase;
+      color: #062746;
+      margin-bottom: 8px;
+    }
+
+    .section-intro {
+      color: #5f6b76;
+      margin-bottom: 30px;
+    }
+
+    .record-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 18px;
+      margin-bottom: 60px;
+    }
+
+    .record-card {
+      background: white;
+      border: 1px solid #dce4ec;
+      padding: 25px;
+      text-align: center;
+    }
+
+    .record-card strong {
+      display: block;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 30px;
+      color: #087de0;
+    }
+
+    .record-card span {
+      color: #506070;
+      font-size: 14px;
+    }
+
+    .player-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+
+    .player-card {
+      background: white;
+      border: 1px solid #dce4ec;
+      overflow: hidden;
+    }
+
+    .player-card-top {
+      background: #062746;
+      color: white;
+      padding: 24px;
+    }
+
+    .player-card h3 {
+      font-family: "Barlow Condensed", sans-serif;
+      text-transform: uppercase;
+      font-size: 30px;
+      margin: 0;
+    }
+
+    .player-role {
+      color: #7dc1ff;
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    .player-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      padding: 20px;
+      gap: 15px;
+    }
+
+    .player-stat {
+      border-bottom: 1px solid #edf1f5;
+      padding-bottom: 10px;
+    }
+
+    .player-stat strong {
+      display: block;
+      font-size: 21px;
+      color: #062746;
+    }
+
+    .player-stat span {
+      font-size: 12px;
+      color: #6d7883;
+      text-transform: uppercase;
+    }
+
+    .player-link {
+      display: block;
+      background: #f4b51c;
+      color: #062746;
+      text-decoration: none;
+      font-weight: 700;
+      text-align: center;
+      padding: 14px;
+      text-transform: uppercase;
+      font-size: 13px;
+    }
+
+    .player-link:hover {
+      background: #ffc832;
+    }
+
+    .back-home {
+      display: inline-block;
+      margin-top: 45px;
+      color: #087de0;
+      text-decoration: none;
+      font-weight: 700;
+    }
+  </style>
+</head>
+
+<body class="players-page">
+
+  <header class="site-header">
+    <div class="shell header-inner">
+
+      <a class="brand" href="index.html" aria-label="Clovelly Gropers home">
+        <img src="assets/clovelly-logo.jpg" alt="Clovelly Cricket Club logo" />
+        <span class="brand-copy">
+          <strong>Clovelly Gropers</strong>
+          <b>Cricket Club</b>
+          <small>EST. 1986</small>
+        </span>
+      </a>
+
+      <nav class="main-nav">
+        <a href="index.html#play">Play Cricket</a>
+        <a href="index.html#fixtures">Fixtures</a>
+        <a href="players.html">Players</a>
+        <a href="#records">Stats & Records</a>
+        <a href="index.html#club">Our Club</a>
+      </nav>
+
+    </div>
+  </header>
+
+
+  <section class="players-hero">
+    <h1>Players <span>& Records</span></h1>
+    <p>
+      Celebrating the players who have represented the Clovelly Gropers,
+      from current cricketers through to the club's leading performers.
+    </p>
+  </section>
+
+
+  <main class="players-container">
+
+    <section id="records">
+
+      <h2 class="section-heading">Club Records</h2>
+
+      <p class="section-intro">
+        Club career records will be added as historical statistics are verified.
+      </p>
+
+      <div class="record-grid">
+
+        <div class="record-card">
+          <strong>—</strong>
+          <span>Most Matches</span>
+        </div>
+
+        <div class="record-card">
+          <strong>—</strong>
+          <span>Most Runs</span>
+        </div>
+
+        <div class="record-card">
+          <strong>—</strong>
+          <span>Most Wickets</span>
+        </div>
+
+        <div class="record-card">
+          <strong>—</strong>
+          <span>Most Centuries</span>
+        </div>
+
+        <div class="record-card">
+          <strong>—</strong>
+          <span>Highest Score</span>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <section id="players">
+
+      <h2 class="section-heading">Player Profiles</h2>
+
+      <p class="section-intro">
+        Career statistics and player profiles from across the club.
+      </p>
+
+      <div class="player-grid">
+
+        <article class="player-card">
+
+          <div class="player-card-top">
+            <h3>Tony Pengue</h3>
+            <div class="player-role">Clovelly CC · Career Statistics</div>
+          </div>
+
+          <div class="player-stats">
+
+            <div class="player-stat">
+              <strong>370</strong>
+              <span>Matches</span>
+            </div>
+
+            <div class="player-stat">
+              <strong>2,519</strong>
+              <span>Runs</span>
+            </div>
+
+            <div class="player-stat">
+              <strong>254</strong>
+              <span>Wickets</span>
+            </div>
+
+            <div class="player-stat">
+              <strong>87</strong>
+              <span>Catches</span>
+            </div>
+
+          </div>
+
+          <a class="player-link" href="#">
+            View Full Profile →
+          </a>
+
+        </article>
+
+      </div>
+
+    </section>
+
+
+    <a class="back-home" href="index.html">
+      ← Back to Clovelly Cricket Club
+    </a>
+
+  </main>
+
+</body>
+</html>

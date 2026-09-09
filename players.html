@@ -257,116 +257,196 @@
     </section>
 
 
-    <section id="players">
+ <section id="players">
 
-      <h2 class="section-heading">Player Profiles</h2>
+  <h2 class="section-heading">Player Career Statistics</h2>
 
-      <p class="section-intro">
-        Career statistics and player profiles from across the club.
-      </p>
+  <p class="section-intro">
+    Search and explore live career statistics for Clovelly players.
+  </p>
 
-      <div class="player-grid">
+  <input
+    type="text"
+    id="playerSearch"
+    placeholder="Search players..."
+    style="
+      width:100%;
+      max-width:420px;
+      padding:12px 14px;
+      margin-bottom:20px;
+      border:1px solid #ccd6df;
+      border-radius:4px;
+      font-size:15px;
+    "
+  >
 
-        <article class="player-card">
- <img class="player-photo" src="assets/tony-pengue.jpg" alt="Tony Pengue - Clovelly Cricket Club">
-          <div class="player-card-top">
-           
-            <h3>Tony Pengue</h3>
-            <div class="player-role">Clovelly CC · Career Statistics</div>
-          </div>
+  <div style="overflow-x:auto;">
+    <table id="careerStatsTable" style="
+      width:100%;
+      border-collapse:collapse;
+      background:white;
+    ">
+      <thead>
+        <tr style="background:#062746;color:white;">
+          <th data-sort="name" style="padding:14px;text-align:left;cursor:pointer;">Player</th>
+          <th data-sort="matches" style="padding:14px;cursor:pointer;">Matches</th>
+          <th data-sort="runs" style="padding:14px;cursor:pointer;">Runs</th>
+          <th data-sort="wickets" style="padding:14px;cursor:pointer;">Wickets</th>
+          <th data-sort="catches" style="padding:14px;cursor:pointer;">Catches</th>
+          <th data-sort="highestScore" style="padding:14px;cursor:pointer;">Highest Score</th>
+          <th style="padding:14px;">Best Bowling</th>
+          <th style="padding:14px;">Profile</th>
+        </tr>
+      </thead>
 
-          <div class="player-stats">
-
-            <div class="player-stat">
-              <strong>370</strong>
-              <span>Matches</span>
-            </div>
-
-            <div class="player-stat">
-              <strong>2,519</strong>
-              <span>Runs</span>
-            </div>
-
-            <div class="player-stat">
-              <strong>234</strong>
-              <span>Wickets</span>
-            </div>
-
-            <div class="player-stat">
-              <strong>97</strong>
-              <span>Catches</span>
-            </div>
-
-            <div class="player-stat">
-  <strong>77</strong>
-  <span>Highest Score</span>
-</div>
-
-<div class="player-stat">
-  <strong>7/40</strong>
-  <span>Best Bowling</span>
-</div>
-
-          </div>
-
-      <a class="player-link" href="https://play.cricket.com.au/player/263f2221-8c45-492c-aeac-9bc5b0f938fe/pengue-tony?tab=career" target="_blank" rel="noopener">
-  View Full Profile →
-</a>
-
-        </article>
-<article class="player-card">
-
-<img class="player-photo" src="assets/des-williams.png" alt="Des Williams - Clovelly Cricket Club">
-  
-
-  <div class="player-card-top">
-    <h3>Des Williams</h3>
-    <div class="player-role">Clovelly CC · Career Statistics</div>
+      <tbody id="careerStatsBody">
+        <tr>
+          <td colspan="8" style="padding:20px;text-align:center;">
+            Loading career statistics...
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
-  <div class="player-stats">
+</section>
 
-    <div class="player-stat">
-      <strong>236</strong>
-      <span>Matches</span>
-    </div>
+<script>
+const players = [
+  {
+    key: "nathan",
+    name: "Nathan Ardler",
+    profile: "https://play.cricket.com.au/player/3a54926b-c415-42f0-9dd0-e98c9a0ebfc8?tab=career"
+  },
+  {
+    key: "rodney",
+    name: "Rodney Staughton",
+    profile: "https://play.cricket.com.au/player/926c8c2c-b8f5-4296-9b88-1af41fbbb3f5?tab=career"
+  },
+  {
+    key: "john",
+    name: "John Astuy",
+    profile: "https://play.cricket.com.au/player/86b390ce-03eb-42f6-8c8f-b809ac342c0e?tab=career"
+  },
+  {
+    key: "des",
+    name: "Des Williams",
+    profile: "https://play.cricket.com.au/player/36c7996d-68f5-4a59-8190-b12644c25ff9/williams-des?tab=career"
+  }
+];
 
-    <div class="player-stat">
-      <strong>2,839</strong>
-      <span>Runs</span>
-    </div>
+let playerData = [];
+let sortDirection = 1;
 
-    <div class="player-stat">
-      <strong>425</strong>
-      <span>Wickets</span>
-    </div>
+async function loadPlayerStats() {
+  try {
+    const results = await Promise.all(
+      players.map(async player => {
+        const response = await fetch(`/api/player-stats?player=${player.key}`);
 
-    <div class="player-stat">
-      <strong>89</strong>
-      <span>Catches</span>
-    </div>
+        if (!response.ok) {
+          throw new Error(`Unable to load ${player.name}`);
+        }
 
-    <div class="player-stat">
-  <strong>83</strong>
-  <span>Highest Score</span>
-</div>
+        const stats = await response.json();
 
-<div class="player-stat">
-  <strong>8/29</strong>
-  <span>Best Bowling</span>
-</div>
+        return {
+          ...player,
+          ...stats
+        };
+      })
+    );
 
-  </div>
+    playerData = results;
+    renderPlayers(playerData);
 
-  <a class="player-link" href="https://play.cricket.com.au/player/36c7996d-68f5-4a59-8190-b12644c25ff9/williams-des?tab=career" target="_blank" rel="noopener">
-    View Full Profile →
-  </a>
+  } catch (error) {
+    document.getElementById("careerStatsBody").innerHTML = `
+      <tr>
+        <td colspan="8" style="padding:20px;text-align:center;">
+          Career statistics are temporarily unavailable.
+        </td>
+      </tr>
+    `;
+  }
+}
 
-</article>
-      </div>
+function renderPlayers(data) {
+  const tbody = document.getElementById("careerStatsBody");
 
-    </section>
+  tbody.innerHTML = data.map(player => `
+    <tr style="border-bottom:1px solid #e2e8ee;">
+      <td style="padding:14px;font-weight:700;text-align:left;">
+        ${player.name}
+      </td>
 
+      <td style="padding:14px;text-align:center;">
+        ${player.matches.toLocaleString()}
+      </td>
+
+      <td style="padding:14px;text-align:center;">
+        ${player.runs.toLocaleString()}
+      </td>
+
+      <td style="padding:14px;text-align:center;">
+        ${player.wickets.toLocaleString()}
+      </td>
+
+      <td style="padding:14px;text-align:center;">
+        ${player.catches.toLocaleString()}
+      </td>
+
+      <td style="padding:14px;text-align:center;">
+        ${player.highestScore ?? "—"}
+      </td>
+
+      <td style="padding:14px;text-align:center;">
+        ${player.bestBowling ?? "—"}
+      </td>
+
+      <td style="padding:14px;text-align:center;">
+        <a
+          href="${player.profile}"
+          target="_blank"
+          rel="noopener"
+          style="color:#087de0;font-weight:700;text-decoration:none;"
+        >
+          View Profile
+        </a>
+      </td>
+    </tr>
+  `).join("");
+}
+
+document.getElementById("playerSearch").addEventListener("input", function() {
+  const search = this.value.toLowerCase();
+
+  const filtered = playerData.filter(player =>
+    player.name.toLowerCase().includes(search)
+  );
+
+  renderPlayers(filtered);
+});
+
+document.querySelectorAll("#careerStatsTable th[data-sort]").forEach(header => {
+  header.addEventListener("click", () => {
+    const field = header.dataset.sort;
+
+    playerData.sort((a, b) => {
+      if (typeof a[field] === "string") {
+        return a[field].localeCompare(b[field]) * sortDirection;
+      }
+
+      return (a[field] - b[field]) * sortDirection;
+    });
+
+    sortDirection *= -1;
+    renderPlayers(playerData);
+  });
+});
+
+loadPlayerStats();
+</script>
 
     <a class="back-home" href="index.html">
       ← Back to Clovelly Cricket Club

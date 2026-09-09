@@ -56,17 +56,19 @@ export default {
 
         const data = await response.json();
 
-        const stats = {
-          player: playerKey,
-          matches: data.matches ?? 0,
-          runs: data.battingAggregate ?? 0,
-          wickets: data.bowlingWickets ?? 0,
-          catches:
-            (data.fieldingCatchesNonWK ?? 0) +
-            (data.fieldingCatchesWK ?? 0),
-          highestScore: data.battingHighScore ?? null,
-          bestBowling: data.bowlingBestInnings ?? null,
-        };
+const stats = {
+  player: playerKey,
+  matches: data.matches ?? 0,
+  runs: data.battingAggregate ?? 0,
+  wickets: data.bowlingWickets ?? 0,
+  catches:
+    (data.fieldingCatchesNonWK ?? 0) +
+    (data.fieldingCatchesWK ?? 0),
+  highestScore: data.battingHighScore ?? null,
+  bestBowling: data.bowlingBestInnings ?? null,
+  battingAverage: data.battingAverage ?? null,
+  bowlingAverage: data.bowlingAverage ?? null,
+};
 
         return Response.json(stats, {
           headers: {

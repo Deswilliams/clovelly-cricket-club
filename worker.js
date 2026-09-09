@@ -3,6 +3,9 @@ const PLAYERS = {
   rodney: "926c8c2c-b8f5-4296-9b88-1af41fbbb3f5",
   john: "86b390ce-03eb-42f6-8c8f-b809ac342c0e",
   des: "36c7996d-68f5-4a59-8190-b12644c25ff9",
+  tony: "263f2221-8c45-492c-aeac-9bc5b0f938fe",
+  william: "7aebcc06-ad36-4ec8-b83b-0e70bfb6e3f0",
+  bulent: "0cc9c5d6-762f-4c0a-b458-f7c569bcbf4a",
 };
 
 export default {

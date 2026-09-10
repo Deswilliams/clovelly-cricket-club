@@ -363,12 +363,15 @@ const players = [
 
 let playerData = [];
 let sortDirection = 1;
-
+const statsScope = document.getElementById("statsScope");
+const savedScope = localStorage.getItem("statsScope");
+if (savedScope) statsScope.value = savedScope;
 async function loadPlayerStats() {
+  const scope = statsScope.value || "career";
   try {
     const results = await Promise.all(
       players.map(async player => {
-        const response = await fetch(`/api/player-stats?player=${player.key}`);
+      const response = await fetch(`/api/player-stats?player=${player.key}&scope=${scope}`);
 
         if (!response.ok) {
           throw new Error(`Unable to load ${player.name}`);
@@ -474,7 +477,10 @@ document.querySelectorAll("#careerStatsTable th[data-sort]").forEach(header => {
     renderPlayers(playerData);
   });
 });
-
+statsScope.addEventListener("change", () => {
+  localStorage.setItem("statsScope", statsScope.value);
+  loadPlayerStats();
+});
 loadPlayerStats();
 </script>
 

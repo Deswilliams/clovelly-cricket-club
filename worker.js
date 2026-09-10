@@ -27,11 +27,18 @@ export default {
         );
       }
 
-      const playerId = PLAYERS[playerKey];
+     const playerId = PLAYERS[playerKey];
 
-      const apiUrl =
-        `https://grassrootsapiproxy.cricket.com.au/participants/players/${playerId}` +
-        `/summary-statistics?seasonId=&organisationId=&matchTypeId=&jsconfig=eccn%3Atrue`;
+const scope = (url.searchParams.get("scope") || "career").toLowerCase();
+
+const organisationId =
+  scope === "clovelly"
+    ? "507a9e9b-86d8-eb11-a7ad-2818780da0cc"
+    : "";
+
+const apiUrl =
+  `https://grassrootsapiproxy.cricket.com.au/participants/players/${playerId}` +
+  `/summary-statistics?seasonId=&organisationId=${organisationId}&matchTypeId=&jsconfig=eccn%3Atrue`;
 
       try {
         const response = await fetch(apiUrl, {

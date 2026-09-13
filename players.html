@@ -91,6 +91,78 @@
       font-size: 14px;
     }
 
+    /* Club Volunteers */
+
+.volunteer-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 60px;
+}
+
+.volunteer-card {
+    background: white;
+    border: 1px solid #dce4ec;
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+}
+
+.volunteer-photo {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 18px;
+    border-radius: 50%;
+    background: #e9eef3;
+    overflow: hidden;
+}
+
+.volunteer-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.volunteer-card h3 {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 26px;
+    color: #026746;
+    margin: 0 0 4px;
+}
+
+.volunteer-role {
+    font-weight: 600;
+    color: #5f6b76;
+    margin: 0 0 18px;
+}
+
+.volunteer-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid #e5e7eb;
+    padding-top: 16px;
+    margin-top: 16px;
+}
+
+.volunteer-stat strong {
+    display: block;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 24px;
+    color: #026746;
+}
+
+.volunteer-stat span {
+    display: block;
+    font-size: 12px;
+    color: #5f6b76;
+}
+
+@media (max-width: 800px) {
+    .volunteer-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
     .player-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -254,6 +326,90 @@
       </div>
 
     </section>
+
+    <section id="volunteers">
+    <h2 class="section-heading">Our Club Volunteers</h2>
+
+    <p class="section-intro">
+        Meet some of the people who help keep Clovelly Cricket Club running.
+    </p>
+
+    <div class="volunteer-grid">
+
+        <div class="volunteer-card">
+            <div class="volunteer-photo"></div>
+            <h3>Tony Pengue</h3>
+            <p class="volunteer-role">President &amp; Club Secretary</p>
+          <div class="volunteer-stats">
+    <div class="volunteer-stat">
+        <strong id="tony-matches">—</strong>
+        <span>Matches</span>
+    </div>
+    <div class="volunteer-stat">
+        <strong id="tony-runs">—</strong>
+        <span>Runs</span>
+    </div>
+    <div class="volunteer-stat">
+        <strong id="tony-wickets">—</strong>
+        <span>Wickets</span>
+    </div>
+    <div class="volunteer-stat">
+        <strong id="tony-catches">—</strong>
+        <span>Catches</span>
+    </div>
+</div>
+        </div>
+
+        <div class="volunteer-card">
+            <div class="volunteer-photo"></div>
+            <h3>Des Williams</h3>
+            <p class="volunteer-role">Treasurer &amp; Club Administrator</p>
+          <div class="volunteer-stats">
+    <div class="volunteer-stat">
+        <strong id="des-matches">—</strong>
+        <span>Matches</span>
+    </div>
+    <div class="volunteer-stat">
+        <strong id="des-runs">—</strong>
+        <span>Runs</span>
+    </div>
+    <div class="volunteer-stat">
+        <strong id="des-wickets">—</strong>
+        <span>Wickets</span>
+    </div>
+    <div class="volunteer-stat">
+        <strong id="des-catches">—</strong>
+        <span>Catches</span>
+    </div>
+</div>
+        </div>
+
+        <div class="volunteer-card">
+            <div class="volunteer-photo"></div>
+            <h3>William Brook</h3>
+            <p class="volunteer-role">Social Media Coordinator</p>
+          <div class="volunteer-stats">
+    <div class="volunteer-stat">
+        <strong id="william-matches">—</strong>
+        <span>Matches</span>
+    </div>
+    <div class="volunteer-stat">
+        <strong id="william-runs">—</strong>
+        <span>Runs</span>
+    </div>
+    <div class="volunteer-stat">
+        <strong id="william-wickets">—</strong>
+        <span>Wickets</span>
+    </div>
+    <div class="volunteer-stat">
+        <strong id="william-catches">—</strong>
+        <span>Catches</span>
+    </div>
+</div>
+        </div>
+
+    </div>
+</section>
 
 
  <section id="players">
@@ -449,7 +605,53 @@ function renderPlayers(data) {
     </tr>
   `).join("");
 }
+async function loadVolunteerStats() {
+  const volunteers = [
+    { key: "tony", prefix: "tony" },
+    { key: "des", prefix: "des" },
+    { key: "william", prefix: "william" }
+  ];
 
+  try {
+    const results = await Promise.all(
+      volunteers.map(async (volunteer) => {
+        const response = await fetch(
+          `/api/player-stats?player=${volunteer.key}&scope=clovelly`
+        );
+
+        if (!response.ok) {
+          throw new Error(`Unable to load ${volunteer.key}`);
+        }
+
+        const stats = await response.json();
+
+        return {
+          prefix: volunteer.prefix,
+          stats
+        };
+      })
+    );
+
+    results.forEach(({ prefix, stats }) => {
+      document.getElementById(`${prefix}-matches`).textContent =
+        stats.matches ?? "—";
+
+      document.getElementById(`${prefix}-runs`).textContent =
+        stats.runs ?? "—";
+
+      document.getElementById(`${prefix}-wickets`).textContent =
+        stats.wickets ?? "—";
+
+      document.getElementById(`${prefix}-catches`).textContent =
+        stats.catches ?? "—";
+    });
+
+  } catch (error) {
+    console.error("Volunteer stats error:", error);
+  }
+}
+
+loadVolunteerStats();
 document.getElementById("playerSearch").addEventListener("input", function() {
   const search = this.value.toLowerCase();
 

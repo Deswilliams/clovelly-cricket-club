@@ -116,6 +116,31 @@ if (url.pathname === "/api/playhq-test") {
     }
   });
 }
+    // Get Clovelly teams for the current 2026/27 season
+if (url.pathname === "/api/playhq-teams") {
+  const seasonId = "df0653cf-2ebc-4663-ab61-0027009852e4";
+
+  const response = await fetch(
+    `https://api.playhq.com/v1/seasons/${seasonId}/teams`,
+    {
+      headers: {
+        "Accept": "application/json",
+        "x-api-key": env.PLAYHQ_API_KEY,
+        "x-phq-tenant": "ca"
+      }
+    }
+  );
+
+  const text = await response.text();
+
+  return new Response(text, {
+    status: response.status,
+    headers: {
+      "Content-Type":
+        response.headers.get("Content-Type") || "application/json"
+    }
+  });
+}
     // Keep serving the existing website normally.
     return env.ASSETS.fetch(request);
   },

@@ -141,6 +141,36 @@ if (url.pathname === "/api/playhq-teams") {
     }
   });
 }
+// Clean list of Clovelly teams and grade IDs
+if (url.pathname === "/api/clovelly-teams") {
+  const seasonId = "df0653cf-2ebc-4663-ab61-0027099852e4";
+  const organisationId = "42286367-02b6-46d5-9a98-e744385639ef";
+
+  const response = await fetch(
+    `https://api.playhq.com/v1/seasons/${seasonId}/teams`,
+    {
+      headers: {
+        "Accept": "application/json",
+        "x-api-key": env.PLAYHQ_API_KEY,
+        "x-phq-tenant": "ca"
+      }
+    }
+  );
+
+  const data = await response.json();
+
+  const clovellyTeams = (data.data || [])
+    .filter(team => team.club?.id === organisationId)
+    .map(team => ({
+      teamName: team.name,
+      teamId: team.id,
+      gradeName: team.grade?.name,
+      gradeId: team.grade?.id
+    }));
+
+  return Response.json(clovellyTeams);
+}
+    
     // Keep serving the existing website normally.
     return env.ASSETS.fetch(request);
   },

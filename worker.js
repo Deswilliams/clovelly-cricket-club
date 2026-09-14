@@ -211,6 +211,65 @@ if (url.pathname === "/api/playhq-fixtures") {
 
   return Response.json(results);
 }
+// Clean Clovelly fixtures for website use
+if (url.pathname === "/api/clovelly-fixtures") {
+  const grades = [
+    {
+      team: "Clovelly Cricket Club 1",
+      grade: "2nd Grade",
+      gradeId: "e9b5467f-1dce-4fce-8602-cbfad840661f"
+    },
+    {
+      team: "Clovelly Cricket Club 2",
+      grade: "4th Grade",
+      gradeId: "b9fff07b-457c-4438-8ecc-d5cf6dc60ce7"
+    }
+  ];
+
+  const allGames = [];
+
+  for (const item of grades) {
+    const response = await fetch(
+      `https://api.playhq.com/v2/grades/${item.gradeId}/games`,
+      {
+        headers: {
+          "Accept": "application/json",
+          "x-api-key": env.PLAYHQ_API_KEY,
+          "x-phq-tenant": "ca"
+        }
+      }
+    );
+
+    const data = await response.json();
+
+    for (const round of data.rounds || []) {
+      for (const game of round.games || []) {
+        const clovellyInGame = (game.teams || []).some(
+          team => team.name === item.team
+        );
+
+        if (!clovellyInGame) continue;
+
+        allGames.push({
+          team: item.team,
+          grade: item.grade,
+          round: round.name,
+          gameId: game.id,
+          status: game.status,
+          scheduled: game.schedule?.dateTime || null,
+          teams: (game.teams || []).map(team => ({
+            name: team.name,
+            home: team.isHomeTeam,
+            outcome: team.outcome
+          }))
+        });
+      }
+    }
+  }
+
+  return Response.json(allGames);
+}
+    
     // Keep serving the existing website normally.
     return env.ASSETS.fetch(request);
   },

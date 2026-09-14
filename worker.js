@@ -244,33 +244,31 @@ if (url.pathname === "/api/clovelly-fixtures") {
 
     const data = await response.json();
 
- const clovellyInGame = (game.teams || []).some(
-  team => team.id === item.teamId
-);
-          team => team.name === item.team
-        );
+for (const round of data.data?.rounds || []) {
+  for (const game of round.games || []) {
+    const clovellyInGame = (game.teams || []).some(
+      team => team.id === item.teamId
+    );
 
-        if (!clovellyInGame) continue;
+    if (!clovellyInGame) continue;
 
-        allGames.push({
-          team: item.team,
-          grade: item.grade,
-          round: round.name,
-          gameId: game.id,
-          status: game.status,
-          scheduled: game.schedule?.dateTime || null,
-          teams: (game.teams || []).map(team => ({
-            name: team.name,
-            home: team.isHomeTeam,
-            outcome: team.outcome
-          }))
-        });
-      }
-    }
+    allGames.push({
+      team: item.team,
+      grade: item.grade,
+      round: round.name,
+      gameId: game.id,
+      status: game.status,
+      scheduled: game.schedule?.dateTime || null,
+      teams: (game.teams || []).map(team => ({
+        name: team.name,
+        home: team.isHomeTeam,
+        outcome: team.outcome
+      }))
+    });
   }
-
-  return Response.json(allGames);
 }
+ return Response.json(allGames);
+}     
     
     // Keep serving the existing website normally.
     return env.ASSETS.fetch(request);

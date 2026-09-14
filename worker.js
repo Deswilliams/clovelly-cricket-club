@@ -91,7 +91,31 @@ const stats = {
         );
       }
     }
+// Test PlayHQ public API connection
+if (url.pathname === "/api/playhq-test") {
+  const organisationId = "42286367-02b6-46d5-9a98-e744385639ef";
 
+  const response = await fetch(
+    `https://api.playhq.com/v1/organisations/${organisationId}/seasons`,
+    {
+      headers: {
+        "Accept": "application/json",
+        "x-api-key": env.PLAYHQ_API_KEY,
+        "x-phq-tenant": "ca"
+      }
+    }
+  );
+
+  const text = await response.text();
+
+  return new Response(text, {
+    status: response.status,
+    headers: {
+      "Content-Type":
+        response.headers.get("Content-Type") || "application/json"
+    }
+  });
+}
     // Keep serving the existing website normally.
     return env.ASSETS.fetch(request);
   },

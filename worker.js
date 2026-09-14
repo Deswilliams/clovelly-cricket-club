@@ -170,7 +170,47 @@ if (url.pathname === "/api/clovelly-teams") {
 
   return Response.json(clovellyTeams);
 }
-    
+    // Get fixtures for both Clovelly teams
+if (url.pathname === "/api/playhq-fixtures") {
+  const grades = [
+    {
+      team: "Clovelly Cricket Club 1",
+      grade: "2nd Grade",
+      gradeId: "e9b5467f-1dce-4fce-8602-cbfad840661f"
+    },
+    {
+      team: "Clovelly Cricket Club 2",
+      grade: "4th Grade",
+      gradeId: "b9fff07b-457c-4438-8ecc-d5cf6dc60ce7"
+    }
+  ];
+
+  const results = await Promise.all(
+    grades.map(async (item) => {
+      const response = await fetch(
+        `https://api.playhq.com/v2/grades/${item.gradeId}/games`,
+        {
+          headers: {
+            "Accept": "application/json",
+            "x-api-key": env.PLAYHQ_API_KEY,
+            "x-phq-tenant": "ca"
+          }
+        }
+      );
+
+      const data = await response.json();
+
+      return {
+        team: item.team,
+        grade: item.grade,
+        status: response.status,
+        data
+      };
+    })
+  );
+
+  return Response.json(results);
+}
     // Keep serving the existing website normally.
     return env.ASSETS.fetch(request);
   },

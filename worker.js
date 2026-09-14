@@ -215,15 +215,17 @@ if (url.pathname === "/api/playhq-fixtures") {
 if (url.pathname === "/api/clovelly-fixtures") {
   const grades = [
     {
-      team: "Clovelly Cricket Club 1",
-      grade: "2nd Grade",
-      gradeId: "e9b5467f-1dce-4fce-8602-cbfad840661f"
-    },
-    {
-      team: "Clovelly Cricket Club 2",
-      grade: "4th Grade",
-      gradeId: "b9fff07b-457c-4438-8ecc-d5cf6dc60ce7"
-    }
+  team: "Clovelly Cricket Club 1",
+  teamId: "7461ed7c-4161-409b-b588-7504d4267b8b",
+  grade: "2nd Grade",
+  gradeId: "e9b5467f-1dce-4fce-8602-cbfad840661f"
+},
+   {
+  team: "Clovelly Cricket Club 2",
+  teamId: "838e7720-1522-4ba9-9b43-183748464458",
+  grade: "4th Grade",
+  gradeId: "b9fff07b-457c-4438-8ecc-d5cf6dc60ce7"
+}
   ];
 
   const allGames = [];
@@ -242,9 +244,9 @@ if (url.pathname === "/api/clovelly-fixtures") {
 
     const data = await response.json();
 
-    for (const round of data.rounds || []) {
-      for (const game of round.games || []) {
-        const clovellyInGame = (game.teams || []).some(
+ const clovellyInGame = (game.teams || []).some(
+  team => team.id === item.teamId
+);
           team => team.name === item.team
         );
 

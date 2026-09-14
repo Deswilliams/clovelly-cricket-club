@@ -118,7 +118,7 @@ if (url.pathname === "/api/playhq-test") {
 }
     // Get Clovelly teams for the current 2026/27 season
 if (url.pathname === "/api/playhq-teams") {
-  const seasonId = "df0653cf-2ebc-4663-ab61-0027009852e4";
+  const seasonId = "df0653cf-2ebc-4663-ab61-0027099852e4";
 
   const response = await fetch(
     `https://api.playhq.com/v1/seasons/${seasonId}/teams`,

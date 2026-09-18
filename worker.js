@@ -213,6 +213,8 @@ if (url.pathname === "/api/playhq-fixtures") {
 }
 // Clean Clovelly fixtures for website use
 if (url.pathname === "/api/clovelly-fixtures") {
+  const seasonId = "df0653cf-2ebc-4663-ab61-0027099852e4";
+
   const grades = [
     {
       team: "Clovelly Cricket Club 1",
@@ -227,6 +229,28 @@ if (url.pathname === "/api/clovelly-fixtures") {
       gradeId: "b9fff07b-457c-4438-8ecc-d5cf6dc60ce7"
     }
   ];
+
+  // Get the season team list so team IDs can be converted to names.
+  const teamsResponse = await fetch(
+    `https://api.playhq.com/v1/seasons/${seasonId}/teams`,
+    {
+      headers: {
+        "Accept": "application/json",
+        "x-api-key": env.PLAYHQ_API_KEY,
+        "x-phq-tenant": "ca"
+      }
+    }
+  );
+
+  const teamsData = await teamsResponse.json();
+
+  const teamLookup = {};
+
+  for (const team of teamsData.data || []) {
+    if (team.id && team.name) {
+      teamLookup[team.id] = team.name;
+    }
+  }
 
   const allGames = [];
 
@@ -246,7 +270,6 @@ if (url.pathname === "/api/clovelly-fixtures") {
 
     for (const round of data.rounds || []) {
       for (const game of round.games || []) {
-
         const clovellyTeam = (game.teams || []).find(
           team => team.id === item.teamId
         );
@@ -257,10 +280,9 @@ if (url.pathname === "/api/clovelly-fixtures") {
           team => team.id !== item.teamId
         );
 
-        const scheduled =
-          Array.isArray(game.schedule) && game.schedule.length
-            ? game.schedule
-            : [];
+        const opponentName = opponentTeam
+          ? teamLookup[opponentTeam.id] || "Opponent TBC"
+          : "Opponent TBC";
 
         allGames.push({
           team: item.team,
@@ -269,24 +291,14 @@ if (url.pathname === "/api/clovelly-fixtures") {
           round: round.name,
           gameId: game.id,
           status: game.status,
-
-          scheduled: scheduled,
-
+          scheduled: game.schedule || [],
           clovellyOutcome: clovellyTeam.outcome || null,
-
-          opponent:
-            opponentTeam?.name ||
-            opponentTeam?.teamName ||
-            opponentTeam?.displayName ||
-            "Opponent TBC",
+          opponent: opponentName,
+          playhqUrl: game.url || null,
 
           teams: (game.teams || []).map(team => ({
             id: team.id || null,
-            name:
-              team.name ||
-              team.teamName ||
-              team.displayName ||
-              null,
+            name: teamLookup[team.id] || null,
             home: team.isHomeTeam ?? null,
             outcome: team.outcome || null
           }))
@@ -294,6 +306,9 @@ if (url.pathname === "/api/clovelly-fixtures") {
       }
     }
   }
+
+  return Response.json(allGames);
+}
 
   return Response.json(allGames);
 }

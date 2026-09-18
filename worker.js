@@ -264,13 +264,15 @@ scheduled: game.schedule || null,
         home: team.isHomeTeam,
         outcome: team.outcome
       }))
-    });
+      });
   }
 }
- return Response.json(allGames);
-}     
-    
-    // Keep serving the existing website normally.
-    return env.ASSETS.fetch(request);
+
+  }
+
+  return Response.json(allGames);
 }
+    // Keep serving the existing website normally.
+return env.ASSETS.fetch(request);
+  }
 };

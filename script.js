@@ -34,15 +34,20 @@ const games = Array.isArray(data) ? data : (data.games || []);
         resultText = "Upcoming";
       }
 
-      const dateText = game.scheduled
-        ? new Date(game.scheduled).toLocaleString("en-AU", {
-            day: "numeric",
-            month: "short",
-            year: "numeric",
-            hour: "numeric",
-            minute: "2-digit"
-          })
-        : "";
+const scheduledDate =
+  Array.isArray(game.scheduled) && game.scheduled.length
+    ? game.scheduled[0].dateTime
+    : null;
+
+const dateText = scheduledDate
+  ? new Date(scheduledDate).toLocaleString("en-AU", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      hour: "numeric",
+      minute: "2-digit"
+    })
+  : "";
 
       return `
         <article class="fixture-card">

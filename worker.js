@@ -244,7 +244,7 @@ if (url.pathname === "/api/clovelly-fixtures") {
 
     const data = await response.json();
 
-for (const round of data.data?.rounds || []) {
+for (const round of data.rounds || []) {
   for (const game of round.games || []) {
     const clovellyInGame = (game.teams || []).some(
       team => team.id === item.teamId

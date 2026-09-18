@@ -48,12 +48,15 @@ const dateText = scheduledDate
       minute: "2-digit"
     })
   : "";
-
+const opponent =
+  (game.teams || []).find(team => !team.home)?.name ||
+  (game.teams || []).find(team => team.name !== game.team)?.name ||
+  "Opponent TBC";
       return `
         <article class="fixture-card">
           <p class="fixture-grade">${game.grade || ""}</p>
           <h3>${game.round || ""}</h3>
-          <p><strong>${resultText}</strong> vs ${game.opponent || "Opponent TBC"}</p>
+          <p><strong>${resultText}</strong> vs ${opponent}</p>
           ${dateText ? `<p>${dateText}</p>` : ""}
           ${game.venue ? `<p>${game.venue}</p>` : ""}
           ${game.playhqUrl

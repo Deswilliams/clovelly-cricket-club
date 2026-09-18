@@ -12,8 +12,10 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
-    // Example:
-    // /api/player-stats?player=des
+    // =========================================================
+    // PLAYER STATISTICS
+    // Example: /api/player-stats?player=des
+    // =========================================================
     if (url.pathname === "/api/player-stats") {
       const playerKey = url.searchParams.get("player");
 
@@ -27,18 +29,20 @@ export default {
         );
       }
 
-     const playerId = PLAYERS[playerKey];
+      const playerId = PLAYERS[playerKey];
 
-const scope = (url.searchParams.get("scope") || "career").toLowerCase();
+      const scope = (
+        url.searchParams.get("scope") || "career"
+      ).toLowerCase();
 
-const organisationId =
-  scope === "clovelly"
-    ? "a80dffbf-86d8-eb11-a7ad-2818780da0cc"
-    : "";
+      const organisationId =
+        scope === "clovelly"
+          ? "a80dffbf-86d8-eb11-a7ad-2818780da0cc"
+          : "";
 
-const apiUrl =
-  `https://grassrootsapiproxy.cricket.com.au/participants/players/${playerId}` +
-  `/summary-statistics?seasonId=&organisationId=${organisationId}&matchTypeId=&jsconfig=eccn%3Atrue`;
+      const apiUrl =
+        `https://grassrootsapiproxy.cricket.com.au/participants/players/${playerId}` +
+        `/summary-statistics?seasonId=&organisationId=${organisationId}&matchTypeId=&jsconfig=eccn%3Atrue`;
 
       try {
         const response = await fetch(apiUrl, {
@@ -63,19 +67,19 @@ const apiUrl =
 
         const data = await response.json();
 
-const stats = {
-  player: playerKey,
-  matches: data.matches ?? 0,
-  runs: data.battingAggregate ?? 0,
-  wickets: data.bowlingWickets ?? 0,
-  catches:
-    (data.fieldingCatchesNonWK ?? 0) +
-    (data.fieldingCatchesWK ?? 0),
-  highestScore: data.battingHighScore ?? null,
-  bestBowling: data.bowlingBestInnings ?? null,
-  battingAverage: data.battingAverage ?? null,
-  bowlingAverage: data.bowlingAverage ?? null,
-};
+        const stats = {
+          player: playerKey,
+          matches: data.matches ?? 0,
+          runs: data.battingAggregate ?? 0,
+          wickets: data.bowlingWickets ?? 0,
+          catches:
+            (data.fieldingCatchesNonWK ?? 0) +
+            (data.fieldingCatchesWK ?? 0),
+          highestScore: data.battingHighScore ?? null,
+          bestBowling: data.bowlingBestInnings ?? null,
+          battingAverage: data.battingAverage ?? null,
+          bowlingAverage: data.bowlingAverage ?? null,
+        };
 
         return Response.json(stats, {
           headers: {
@@ -91,228 +95,273 @@ const stats = {
         );
       }
     }
-// Test PlayHQ public API connection
-if (url.pathname === "/api/playhq-test") {
-  const organisationId = "42286367-02b6-46d5-9a98-e744385639ef";
 
-  const response = await fetch(
-    `https://api.playhq.com/v1/organisations/${organisationId}/seasons`,
-    {
-      headers: {
-        "Accept": "application/json",
-        "x-api-key": env.PLAYHQ_API_KEY,
-        "x-phq-tenant": "ca"
-      }
-    }
-  );
+    // =========================================================
+    // TEST PLAYHQ CONNECTION
+    // =========================================================
+    if (url.pathname === "/api/playhq-test") {
+      const organisationId =
+        "42286367-02b6-46d5-9a98-e744385639ef";
 
-  const text = await response.text();
-
-  return new Response(text, {
-    status: response.status,
-    headers: {
-      "Content-Type":
-        response.headers.get("Content-Type") || "application/json"
-    }
-  });
-}
-    // Get Clovelly teams for the current 2026/27 season
-if (url.pathname === "/api/playhq-teams") {
-  const seasonId = "df0653cf-2ebc-4663-ab61-0027099852e4";
-
-  const response = await fetch(
-    `https://api.playhq.com/v1/seasons/${seasonId}/teams`,
-    {
-      headers: {
-        "Accept": "application/json",
-        "x-api-key": env.PLAYHQ_API_KEY,
-        "x-phq-tenant": "ca"
-      }
-    }
-  );
-
-  const text = await response.text();
-
-  return new Response(text, {
-    status: response.status,
-    headers: {
-      "Content-Type":
-        response.headers.get("Content-Type") || "application/json"
-    }
-  });
-}
-// Clean list of Clovelly teams and grade IDs
-if (url.pathname === "/api/clovelly-teams") {
-  const seasonId = "df0653cf-2ebc-4663-ab61-0027099852e4";
-  const organisationId = "42286367-02b6-46d5-9a98-e744385639ef";
-
-  const response = await fetch(
-    `https://api.playhq.com/v1/seasons/${seasonId}/teams`,
-    {
-      headers: {
-        "Accept": "application/json",
-        "x-api-key": env.PLAYHQ_API_KEY,
-        "x-phq-tenant": "ca"
-      }
-    }
-  );
-
-  const data = await response.json();
-
-  const clovellyTeams = (data.data || [])
-    .filter(team => team.club?.id === organisationId)
-    .map(team => ({
-      teamName: team.name,
-      teamId: team.id,
-      gradeName: team.grade?.name,
-      gradeId: team.grade?.id
-    }));
-
-  return Response.json(clovellyTeams);
-}
-    // Get fixtures for both Clovelly teams
-if (url.pathname === "/api/playhq-fixtures") {
-  const grades = [
-    {
-      team: "Clovelly Cricket Club 1",
-      grade: "2nd Grade",
-      gradeId: "e9b5467f-1dce-4fce-8602-cbfad840661f"
-    },
-    {
-      team: "Clovelly Cricket Club 2",
-      grade: "4th Grade",
-      gradeId: "b9fff07b-457c-4438-8ecc-d5cf6dc60ce7"
-    }
-  ];
-
-  const results = await Promise.all(
-    grades.map(async (item) => {
       const response = await fetch(
-        `https://api.playhq.com/v2/grades/${item.gradeId}/games`,
+        `https://api.playhq.com/v1/organisations/${organisationId}/seasons`,
         {
           headers: {
-            "Accept": "application/json",
+            Accept: "application/json",
             "x-api-key": env.PLAYHQ_API_KEY,
-            "x-phq-tenant": "ca"
-          }
+            "x-phq-tenant": "ca",
+          },
+        }
+      );
+
+      const text = await response.text();
+
+      return new Response(text, {
+        status: response.status,
+        headers: {
+          "Content-Type":
+            response.headers.get("Content-Type") ||
+            "application/json",
+        },
+      });
+    }
+
+    // =========================================================
+    // PLAYHQ TEAMS - RAW DATA
+    // =========================================================
+    if (url.pathname === "/api/playhq-teams") {
+      const seasonId =
+        "df0653cf-2ebc-4663-ab61-0027099852e4";
+
+      const response = await fetch(
+        `https://api.playhq.com/v1/seasons/${seasonId}/teams`,
+        {
+          headers: {
+            Accept: "application/json",
+            "x-api-key": env.PLAYHQ_API_KEY,
+            "x-phq-tenant": "ca",
+          },
+        }
+      );
+
+      const text = await response.text();
+
+      return new Response(text, {
+        status: response.status,
+        headers: {
+          "Content-Type":
+            response.headers.get("Content-Type") ||
+            "application/json",
+        },
+      });
+    }
+
+    // =========================================================
+    // CLEAN LIST OF CLOVELLY TEAMS
+    // =========================================================
+    if (url.pathname === "/api/clovelly-teams") {
+      const seasonId =
+        "df0653cf-2ebc-4663-ab61-0027099852e4";
+
+      const organisationId =
+        "42286367-02b6-46d5-9a98-e744385639ef";
+
+      const response = await fetch(
+        `https://api.playhq.com/v1/seasons/${seasonId}/teams`,
+        {
+          headers: {
+            Accept: "application/json",
+            "x-api-key": env.PLAYHQ_API_KEY,
+            "x-phq-tenant": "ca",
+          },
         }
       );
 
       const data = await response.json();
 
-      return {
-        team: item.team,
-        grade: item.grade,
-        status: response.status,
-        data
-      };
-    })
-  );
+      const clovellyTeams = (data.data || [])
+        .filter(
+          (team) => team.club?.id === organisationId
+        )
+        .map((team) => ({
+          teamName: team.name,
+          teamId: team.id,
+          gradeName: team.grade?.name,
+          gradeId: team.grade?.id,
+        }));
 
-  return Response.json(results);
-}
-// Clean Clovelly fixtures for website use
-if (url.pathname === "/api/clovelly-fixtures") {
-  const seasonId = "df0653cf-2ebc-4663-ab61-0027099852e4";
-
-  const grades = [
-    {
-      team: "Clovelly Cricket Club 1",
-      teamId: "7461ed7c-4161-409b-b588-7504d4267b8b",
-      grade: "2nd Grade",
-      gradeId: "e9b5467f-1dce-4fce-8602-cbfad840661f"
-    },
-    {
-      team: "Clovelly Cricket Club 2",
-      teamId: "838e7720-1522-4ba9-9b43-183748464458",
-      grade: "4th Grade",
-      gradeId: "b9fff07b-457c-4438-8ecc-d5cf6dc60ce7"
+      return Response.json(clovellyTeams);
     }
-  ];
 
-  // Get the season team list so team IDs can be converted to names.
-  const teamsResponse = await fetch(
-    `https://api.playhq.com/v1/seasons/${seasonId}/teams`,
-    {
-      headers: {
-        "Accept": "application/json",
-        "x-api-key": env.PLAYHQ_API_KEY,
-        "x-phq-tenant": "ca"
-      }
+    // =========================================================
+    // RAW FIXTURES FOR BOTH CLOVELLY GRADES
+    // =========================================================
+    if (url.pathname === "/api/playhq-fixtures") {
+      const grades = [
+        {
+          team: "Clovelly Cricket Club 1",
+          grade: "2nd Grade",
+          gradeId:
+            "e9b5467f-1dce-4fce-8602-cbfad840661f",
+        },
+        {
+          team: "Clovelly Cricket Club 2",
+          grade: "4th Grade",
+          gradeId:
+            "b9fff07b-457c-4438-8ecc-d5cf6dc60ce7",
+        },
+      ];
+
+      const results = await Promise.all(
+        grades.map(async (item) => {
+          const response = await fetch(
+            `https://api.playhq.com/v2/grades/${item.gradeId}/games`,
+            {
+              headers: {
+                Accept: "application/json",
+                "x-api-key": env.PLAYHQ_API_KEY,
+                "x-phq-tenant": "ca",
+              },
+            }
+          );
+
+          const data = await response.json();
+
+          return {
+            team: item.team,
+            grade: item.grade,
+            status: response.status,
+            data,
+          };
+        })
+      );
+
+      return Response.json(results);
     }
-  );
 
-  const teamsData = await teamsResponse.json();
+    // =========================================================
+    // CLEAN CLOVELLY FIXTURES FOR WEBSITE
+    // =========================================================
+    if (url.pathname === "/api/clovelly-fixtures") {
+      const seasonId =
+        "df0653cf-2ebc-4663-ab61-0027099852e4";
 
-  const teamLookup = {};
+      const grades = [
+        {
+          team: "Clovelly Cricket Club 1",
+          teamId:
+            "7461ed7c-4161-409b-b588-7504d4267b8b",
+          grade: "2nd Grade",
+          gradeId:
+            "e9b5467f-1dce-4fce-8602-cbfad840661f",
+        },
+        {
+          team: "Clovelly Cricket Club 2",
+          teamId:
+            "838e7720-1522-4ba9-9b43-183748464458",
+          grade: "4th Grade",
+          gradeId:
+            "b9fff07b-457c-4438-8ecc-d5cf6dc60ce7",
+        },
+      ];
 
-  for (const team of teamsData.data || []) {
-    if (team.id && team.name) {
-      teamLookup[team.id] = team.name;
-    }
-  }
+      // Get season team list so PlayHQ team IDs
+      // can be converted into readable team names.
+      const teamsResponse = await fetch(
+        `https://api.playhq.com/v1/seasons/${seasonId}/teams`,
+        {
+          headers: {
+            Accept: "application/json",
+            "x-api-key": env.PLAYHQ_API_KEY,
+            "x-phq-tenant": "ca",
+          },
+        }
+      );
 
-  const allGames = [];
+      const teamsData = await teamsResponse.json();
 
-  for (const item of grades) {
-    const response = await fetch(
-      `https://api.playhq.com/v2/grades/${item.gradeId}/games`,
-      {
-        headers: {
-          "Accept": "application/json",
-          "x-api-key": env.PLAYHQ_API_KEY,
-          "x-phq-tenant": "ca"
+      const teamLookup = {};
+
+      for (const team of teamsData.data || []) {
+        if (team.id && team.name) {
+          teamLookup[team.id] = team.name;
         }
       }
-    );
 
-    const data = await response.json();
+      const allGames = [];
 
-    for (const round of data.rounds || []) {
-      for (const game of round.games || []) {
-        const clovellyTeam = (game.teams || []).find(
-          team => team.id === item.teamId
+      for (const item of grades) {
+        const response = await fetch(
+          `https://api.playhq.com/v2/grades/${item.gradeId}/games`,
+          {
+            headers: {
+              Accept: "application/json",
+              "x-api-key": env.PLAYHQ_API_KEY,
+              "x-phq-tenant": "ca",
+            },
+          }
         );
 
-        if (!clovellyTeam) continue;
+        const data = await response.json();
 
-        const opponentTeam = (game.teams || []).find(
-          team => team.id !== item.teamId
-        );
+        for (const round of data.rounds || []) {
+          for (const game of round.games || []) {
+            const clovellyTeam = (
+              game.teams || []
+            ).find(
+              (team) => team.id === item.teamId
+            );
 
-        const opponentName = opponentTeam
-          ? teamLookup[opponentTeam.id] || "Opponent TBC"
-          : "Opponent TBC";
+            if (!clovellyTeam) {
+              continue;
+            }
 
-        allGames.push({
-          team: item.team,
-          teamId: item.teamId,
-          grade: item.grade,
-          round: round.name,
-          gameId: game.id,
-          status: game.status,
-          scheduled: game.schedule || [],
-          clovellyOutcome: clovellyTeam.outcome || null,
-          opponent: opponentName,
-          playhqUrl: game.url || null,
+            const opponentTeam = (
+              game.teams || []
+            ).find(
+              (team) => team.id !== item.teamId
+            );
 
-          teams: (game.teams || []).map(team => ({
-            id: team.id || null,
-            name: teamLookup[team.id] || null,
-            home: team.isHomeTeam ?? null,
-            outcome: team.outcome || null
-          }))
-        });
+            const opponentName = opponentTeam
+              ? teamLookup[opponentTeam.id] ||
+                "Opponent TBC"
+              : "Opponent TBC";
+
+            allGames.push({
+              team: item.team,
+              teamId: item.teamId,
+              grade: item.grade,
+              round: round.name,
+              gameId: game.id,
+              status: game.status,
+              scheduled: game.schedule || [],
+              clovellyOutcome:
+                clovellyTeam.outcome || null,
+              opponent: opponentName,
+              playhqUrl: game.url || null,
+
+              teams: (game.teams || []).map(
+                (team) => ({
+                  id: team.id || null,
+                  name:
+                    teamLookup[team.id] || null,
+                  home:
+                    team.isHomeTeam ?? null,
+                  outcome:
+                    team.outcome || null,
+                })
+              ),
+            });
+          }
+        }
       }
+
+      return Response.json(allGames);
     }
-  }
 
-  return Response.json(allGames);
-}
-
-  return Response.json(allGames);
-}
-    // Keep serving the existing website normally.
-return env.ASSETS.fetch(request);
-  }
+    // =========================================================
+    // SERVE EXISTING WEBSITE
+    // =========================================================
+    return env.ASSETS.fetch(request);
+  },
 };

@@ -13,9 +13,8 @@ async function loadClovellyFixtures() {
     const response = await fetch("/api/clovelly-fixtures");
     if (!response.ok) throw new Error("Unable to load fixtures");
 
-    const data = await response.json();
-    const games = data.games || [];
-
+   const data = await response.json();
+const games = Array.isArray(data) ? data : (data.games || []);
     if (!games.length) {
       container.innerHTML = "<p>No fixtures are currently available.</p>";
       return;

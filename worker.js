@@ -14,7 +14,6 @@ export default {
 
     // =========================================================
     // PLAYER STATISTICS
-    // Example: /api/player-stats?player=des
     // =========================================================
     if (url.pathname === "/api/player-stats") {
       const playerKey = url.searchParams.get("player");
@@ -127,7 +126,7 @@ export default {
     }
 
     // =========================================================
-    // PLAYHQ TEAMS - RAW DATA
+    // PLAYHQ TEAMS
     // =========================================================
     if (url.pathname === "/api/playhq-teams") {
       const seasonId =
@@ -157,7 +156,7 @@ export default {
     }
 
     // =========================================================
-    // CLEAN LIST OF CLOVELLY TEAMS
+    // CLEAN CLOVELLY TEAM LIST
     // =========================================================
     if (url.pathname === "/api/clovelly-teams") {
       const seasonId =
@@ -194,7 +193,7 @@ export default {
     }
 
     // =========================================================
-    // RAW FIXTURES FOR BOTH CLOVELLY GRADES
+    // RAW PLAYHQ FIXTURES
     // =========================================================
     if (url.pathname === "/api/playhq-fixtures") {
       const grades = [
@@ -240,7 +239,7 @@ export default {
     }
 
     // =========================================================
-    // CLEAN CLOVELLY FIXTURES FOR WEBSITE
+    // CLEAN CLOVELLY FIXTURES
     // =========================================================
     if (url.pathname === "/api/clovelly-fixtures") {
       const seasonId =
@@ -265,8 +264,9 @@ export default {
         },
       ];
 
-      // Get season team list so PlayHQ team IDs
-      // can be converted into readable team names.
+      // -------------------------------------------------------
+      // Build PlayHQ team-name lookup
+      // -------------------------------------------------------
       const teamsResponse = await fetch(
         `https://api.playhq.com/v1/seasons/${seasonId}/teams`,
         {
@@ -286,10 +286,18 @@ export default {
         if (team.id && team.name) {
           teamLookup[team.id] = team.name;
         }
+
+        // Some PlayHQ responses contain another team object.
+        if (team.team?.id && team.team?.name) {
+          teamLookup[team.team.id] = team.team.name;
+        }
       }
 
       const allGames = [];
 
+      // -------------------------------------------------------
+      // Process both Clovelly grades
+      // -------------------------------------------------------
       for (const item of grades) {
         const response = await fetch(
           `https://api.playhq.com/v2/grades/${item.gradeId}/games`,
@@ -306,9 +314,9 @@ export default {
 
         for (const round of data.rounds || []) {
           for (const game of round.games || []) {
-            const clovellyTeam = (
-              game.teams || []
-            ).find(
+            const gameTeams = game.teams || [];
+
+            const clovellyTeam = gameTeams.find(
               (team) => team.id === item.teamId
             );
 
@@ -316,22 +324,25 @@ export default {
               continue;
             }
 
-            const opponentTeam = (
-              game.teams || []
-            ).find(
+            const opponentTeam = gameTeams.find(
               (team) => team.id !== item.teamId
             );
 
-            const opponentName = opponentTeam
-              ? teamLookup[opponentTeam.id] ||
-                "Opponent TBC"
-              : "Opponent TBC";
+            let opponentName = "Opponent TBC";
+
+            if (opponentTeam) {
+              opponentName =
+                opponentTeam.name ||
+                opponentTeam.team?.name ||
+                teamLookup[opponentTeam.id] ||
+                "Opponent TBC";
+            }
 
             allGames.push({
               team: item.team,
               teamId: item.teamId,
               grade: item.grade,
-              round: round.name,
+              round: round.name || "",
               gameId: game.id,
               status: game.status,
               scheduled: game.schedule || [],
@@ -340,17 +351,18 @@ export default {
               opponent: opponentName,
               playhqUrl: game.url || null,
 
-              teams: (game.teams || []).map(
-                (team) => ({
-                  id: team.id || null,
-                  name:
-                    teamLookup[team.id] || null,
-                  home:
-                    team.isHomeTeam ?? null,
-                  outcome:
-                    team.outcome || null,
-                })
-              ),
+              teams: gameTeams.map((team) => ({
+                id: team.id || null,
+                name:
+                  team.name ||
+                  team.team?.name ||
+                  teamLookup[team.id] ||
+                  null,
+                home:
+                  team.isHomeTeam ?? null,
+                outcome:
+                  team.outcome || null,
+              })),
             });
           }
         }
@@ -360,7 +372,7 @@ export default {
     }
 
     // =========================================================
-    // SERVE EXISTING WEBSITE
+    // EXISTING WEBSITE
     // =========================================================
     return env.ASSETS.fetch(request);
   },

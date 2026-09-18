@@ -272,5 +272,5 @@ scheduled: game.schedule || null,
     
     // Keep serving the existing website normally.
     return env.ASSETS.fetch(request);
-  },
+}
 };

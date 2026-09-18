@@ -258,7 +258,7 @@ for (const round of data.rounds || []) {
       round: round.name,
       gameId: game.id,
       status: game.status,
-      scheduled: game.schedule?.[0]?.dateTime || null,
+scheduled: round.schedule?.[0]?.dateTime || null,
       teams: (game.teams || []).map(team => ({
         name: team.name,
         home: team.isHomeTeam,

@@ -191,6 +191,7 @@
 
 <script>
 const players = [
+  { key: "pedro", name: "Pedro Jay", profile: "https://play.cricket.com.au/player/7952fea2-0c1c-44b6-99d4-9aeb86e6c7ae/jay-pedro?tab=career" },
   { key: "mark", name: "Mark Gannon", profile: "https://play.cricket.com.au/player/d4d9f8d0-ba05-4fda-a86f-17d97493902b/gannon-mark?tab=career" },
   { key: "paul", name: "Paul Deveau", profile: "https://play.cricket.com.au/player/843782ba-4988-4692-a503-ff16ede111bc/deveau-paul?tab=career" },
   { key: "samuel", name: "Samuel Cantelo", profile: "https://play.cricket.com.au/player/29bfe934-cdc9-43ca-8470-0daf353f5db0/cantelo-samuel?tab=career" },
@@ -254,70 +255,83 @@ const players = [
 
 let playerData = [];
 let sortDirection = 1;
+let statsRequest = 0;
 const statsScope = document.getElementById("statsScope");
-const savedScope = localStorage.getItem("statsScope");
-if (savedScope) statsScope.value = savedScope;
+try {
+  const savedScope = localStorage.getItem("statsScope");
+  if (savedScope === "career" || savedScope === "clovelly") statsScope.value = savedScope;
+} catch {}
+function filteredPlayers() {
+  const search = document.getElementById("playerSearch").value.toLowerCase();
+  return playerData.filter(player => player.name.toLowerCase().includes(search));
+}
 async function loadPlayerStats() {
+  const requestId = ++statsRequest;
   const scope = statsScope.value || "career";
-  try {
-    const results = await Promise.all(
-      players.map(async player => {
-      const response = await fetch(`/api/player-stats?player=${player.key}&scope=${scope}`);
-
-        if (!response.ok) {
-          throw new Error(`Unable to load ${player.name}`);
-        }
-
+  playerData = [];
+  document.getElementById("careerStatsBody").innerHTML =
+    '<tr><td colspan="10" style="padding:20px;text-align:center;">Loading statistics…</td></tr>';
+  const results = new Array(players.length);
+  let next = 0;
+  async function loadNext() {
+    while (next < players.length) {
+      const index = next++;
+      const player = players[index];
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 20000);
+      try {
+        const response = await fetch(`/api/player-stats?player=${player.key}&scope=${scope}`, { signal: controller.signal });
+        if (!response.ok) throw new Error("Statistics unavailable");
         const stats = await response.json();
-
-        return {
-          ...player,
-          ...stats
-        };
-      })
-    );
-
-    playerData = results;
-    renderPlayers(playerData);
-
-  } catch (error) {
-    document.getElementById("careerStatsBody").innerHTML = `
-      <tr>
-        <td colspan="10" style="padding:20px;text-align:center;">
-          Career statistics are temporarily unavailable.
-        </td>
-      </tr>
-    `;
+        if (stats.error) throw new Error("Statistics unavailable");
+        results[index] = { ...player, ...stats };
+      } catch {
+        results[index] = { ...player, unavailable: true };
+      } finally {
+        clearTimeout(timeout);
+      }
+      if (requestId !== statsRequest) return;
+      playerData = results.filter(Boolean);
+      renderPlayers(filteredPlayers());
+    }
   }
+  await Promise.all(Array.from({ length: Math.min(6, players.length) }, loadNext));
+}
+function formatCount(value) {
+  return typeof value === "number" && Number.isFinite(value) ? value.toLocaleString() : "—";
 }
 
 function renderPlayers(data) {
   const tbody = document.getElementById("careerStatsBody");
 
+  if (!data.length) {
+    tbody.innerHTML = '<tr><td colspan="10" style="padding:20px;text-align:center;">No matching players.</td></tr>';
+    return;
+  }
   tbody.innerHTML = data.map(player => `
     <tr style="border-bottom:1px solid #e2e8ee;">
       <td style="padding:14px;font-weight:700;text-align:left;">
-        ${player.name}
+        ${player.name}${player.unavailable ? '<span style="display:block;font-size:11px;font-weight:400;color:#65748a;">Stats temporarily unavailable</span>' : ""}
       </td>
 
       <td style="padding:14px;text-align:center;">
-        ${player.matches.toLocaleString()}
+        ${formatCount(player.matches)}
       </td>
 
       <td style="padding:14px;text-align:center;">
-        ${player.runs.toLocaleString()}
+        ${formatCount(player.runs)}
       </td>
 <td style="padding:14px;text-align:center;">
   ${player.battingAverage ?? "—"}
 </td>
       <td style="padding:14px;text-align:center;">
-        ${player.wickets.toLocaleString()}
+        ${formatCount(player.wickets)}
       </td>
 <td style="padding:14px;text-align:center;">
   ${player.bowlingAverage ?? "—"}
 </td>
       <td style="padding:14px;text-align:center;">
-        ${player.catches.toLocaleString()}
+        ${formatCount(player.catches)}
       </td>
 
       <td style="padding:14px;text-align:center;">
@@ -411,11 +425,11 @@ document.querySelectorAll("#careerStatsTable th[data-sort]").forEach(header => {
     });
 
     sortDirection *= -1;
-    renderPlayers(playerData);
+    renderPlayers(filteredPlayers());
   });
 });
 statsScope.addEventListener("change", () => {
-  localStorage.setItem("statsScope", statsScope.value);
+  try { localStorage.setItem("statsScope", statsScope.value); } catch {}
   loadPlayerStats();
 });
 loadPlayerStats();

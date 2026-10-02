@@ -1,4 +1,6 @@
 const PLAYERS = {
+  samuel: "29bfe934-cdc9-43ca-8470-0daf353f5db0",
+  christian: "3ef466a5-fce8-49a2-8c7e-ed6f03019c72",
   greg: "83f875fa-f9b4-4130-907c-d600e51624f2",
   chris: "9edd8916-bd24-4724-801a-fe52527267c7",
   hassam: "13ace655-8bc7-443a-9966-804eb55b9d82",

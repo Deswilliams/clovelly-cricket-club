@@ -1,4 +1,5 @@
 const PLAYERS = {
+  christopher: "f7df6d1e-9b90-433e-9b22-41bc638d0153",
   pedro: "7952fea2-0c1c-44b6-99d4-9aeb86e6c7ae",
   mark: "d4d9f8d0-ba05-4fda-a86f-17d97493902b",
   paul: "843782ba-4988-4692-a503-ff16ede111bc",

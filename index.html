@@ -12,9 +12,10 @@
 
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="spotlight-update.css" />
+  <link rel="stylesheet" href="home.css" />
 </head>
 
-<body>
+<body class="home">
 
 <header class="site-header">
   <div class="shell header-inner">
@@ -30,15 +31,14 @@
     </a>
 
     <button class="menu-toggle" aria-expanded="false" aria-controls="main-nav">
-      ☰
+      <span aria-hidden="true">☰</span><span class="sr-only">Open navigation</span>
     </button>
 
     <nav id="main-nav" class="main-nav">
       <a href="#play">Play Cricket</a>
-      <a href="#fixtures">Fixtures</a>
-      <a href="players.html">Players</a>
-      <a href="players.html">Stats & Records</a>
-      <a href="#club">Our Club</a>
+      <a href="#matches">Fixtures</a>
+      <a href="players.html">Our People & Records</a>
+      <a href="#about">Our Club</a>
 
       <a
         class="join-small"
@@ -67,16 +67,16 @@
       <p class="eyebrow">Clovelly Cricket Club</p>
 
       <h1>
-        LOCAL CRICKET.<br>
-        <span>CLOVELLY.</span>
+        YOUR CLUB.<br>
+        <span>YOUR CRICKET.</span>
       </h1>
 
       <p class="hero-lead">
-        Cricket. Mateship. Community.
+        Local cricket. Good people. Competitive teams.
       </p>
 
       <p class="hero-meta">
-        Clovelly Cricket Club <i>•</i> Est. 1986
+        Playing around Botany &amp; Malabar <i>•</i> 2026/27 season
       </p>
 
       <div class="hero-actions">
@@ -86,7 +86,7 @@
           href="https://www.playhq.com/cricket-australia/register/94d595"
           target="_blank"
           rel="noopener">
-          Join the Club →
+          Join Clovelly →
         </a>
 
         <a class="btn btn-outline" href="#matches">
@@ -99,25 +99,29 @@
   </section>
 
 
+  <section class="recruitment shell" aria-labelledby="recruit-heading">
+    <div><p class="eyebrow">New players welcome</p><h2 id="recruit-heading">Come and play for Clovelly.</h2><p>We field two senior teams in 2nd Grade and 4th Grade, playing around Botany and Malabar. Keen to get involved? Contact the club and we’ll help you get started.</p></div>
+    <a class="btn btn-gold" href="mailto:clovellycricketclub@gmail.com?subject=Playing%20for%20Clovelly">Contact Us →</a>
+  </section>
   <!-- QUICK LINKS -->
 
   <section class="quick-section shell" aria-label="Club links">
 
     <article class="quick-card" id="play">
 
-      <div class="icon">🏏</div>
+      <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 18 9-9 4 4-9 9zM14 9l3-3 4 4-3 3"/><circle cx="6" cy="6" r="2"/></svg></div>
 
       <h2>Play Cricket</h2>
 
       <p>
-        Registration, fees and everything you need to get started with Clovelly.
+        New players welcome. Get in touch and find your place in the team.
       </p>
 
       <a
-        href="https://www.playhq.com/cricket-australia/register/94d595"
+        href="mailto:clovellycricketclub@gmail.com?subject=Playing%20for%20Clovelly"
         target="_blank"
         rel="noopener">
-        Join Clovelly →
+        Send an enquiry →
       </a>
 
     </article>
@@ -125,12 +129,12 @@
 
     <article class="quick-card" id="fixtures">
 
-      <div class="icon">▦</div>
+      <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 11h18m-13 4h2m4 0h2"/></svg></div>
 
       <h2>Fixtures & Results</h2>
 
       <p>
-        Follow both Clovelly teams with live upcoming matches and recent results.
+        Upcoming games and recent results for our two senior teams.
       </p>
 
       <a href="#matches">
@@ -142,12 +146,12 @@
 
     <article class="quick-card">
 
-      <div class="icon">▥</div>
+      <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 21v-3a6 6 0 0 1 12 0v3m2-17a3 3 0 0 1 0 6m1 5a5 5 0 0 1 3 5"/></svg></div>
 
       <h2>Our People & Records</h2>
 
       <p>
-        Meet our club volunteers, explore player career statistics and discover Clovelly's cricket records.
+        Meet the volunteers and explore our player career statistics.
       </p>
 
       <a href="players.html">
@@ -159,12 +163,12 @@
 
     <article class="quick-card" id="club">
 
-      <div class="icon">CG</div>
+      <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v11H3zM9 21v-7h6v7"/></svg></div>
 
       <h2>Our Club</h2>
 
       <p>
-        Our history, committee, values and the people who make Clovelly a great club.
+        Local friendships and community cricket since 1986.
       </p>
 
       <a href="#about">
@@ -186,7 +190,7 @@
 
         <p class="eyebrow gold">Fixtures & Results</p>
 
-        <h2>MATCHES & RESULTS</h2>
+        <h2>OUR TEAMS. THIS SEASON.</h2>
 
         <p>
           Follow Clovelly Cricket Club's 2nd Grade and 4th Grade teams.
@@ -206,7 +210,7 @@
 
       <div class="fixtures-source">
 
-        Fixtures and results are provided by PlayHQ and update automatically.
+        Match details provided by PlayHQ.
 
         <a
           href="https://ca.playhq.com/org/42286367-02b6-46d5-9a98-e744385639ef/games"
@@ -254,9 +258,10 @@
 
       <span>Proudly supported by</span>
 
-      <strong>COLTRONICS</strong>
+      <a class="sponsor-name" href="https://www.coltronics.com.au/" target="_blank" rel="noopener"><strong>COLTRONICS</strong></a>
 
       <small>Delivering Excellence</small>
+      <a class="sponsor-enquiry" href="mailto:clovellycricketclub@gmail.com?subject=Sponsoring%20Clovelly">Become a Sponsor →</a>
 
     </div>
 
@@ -302,7 +307,7 @@
       <h3>Connect</h3>
 
       <a
-        href="https://www.facebook.com/clovelly.cricketclub"
+        href="https://www.facebook.com/clovellycricketclub1"
         target="_blank"
         rel="noopener">
         Facebook
@@ -341,7 +346,7 @@
 
   <div class="shell footer-bottom">
 
-    © <span id="year"></span> Clovelly Cricket Club. Development website.
+    © <span id="year"></span> Clovelly Cricket Club.
 
   </div>
 

@@ -1,0 +1,61 @@
+/* Homepage presentation; player pages retain their existing styles. */
+.home section[id]{scroll-margin-top:110px}
+.home .hero{min-height:440px}
+.home .hero-content{padding:64px 0}
+.home .hero h1{font-size:clamp(58px,6.5vw,84px);line-height:.98}
+.home .hero .eyebrow{color:#b9d9ff}
+.home .hero-lead{font-size:23px;margin:22px 0 10px}
+.home .hero-meta{font-size:14px;line-height:1.7}
+.home .recruitment{display:flex;align-items:center;gap:48px;padding:42px 0;border-bottom:1px solid #dfe4ea}
+.home .recruitment h2{font-family:'Barlow Condensed',Arial,sans-serif;font-size:36px;margin:0}
+.home .recruitment p:last-child{max-width:750px;color:var(--muted);line-height:1.7;margin-bottom:0}
+.home .recruitment .btn{flex-shrink:0}
+.home .quick-section{padding:32px 0 44px;grid-template-columns:repeat(2,1fr);gap:16px}
+.home .quick-card{position:relative;min-height:0;display:grid;grid-template-columns:48px 1fr;column-gap:20px;text-align:left;padding:24px;align-items:start;box-shadow:none;border-radius:8px}
+.home .quick-card .icon{grid-row:1/4;width:48px;height:48px;margin:0;background:#eaf2fb;border-radius:50%;box-shadow:none;color:#145b9e}
+.home .quick-card .icon svg{width:27px;height:27px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.home .quick-card h2{font-size:25px;margin:0}
+.home .quick-card h2:after{display:none}
+.home .quick-card p{max-width:none;font-size:14px;margin:8px 0 12px;line-height:1.55}
+.home .quick-card a{font-size:16px}
+.home .matches-heading{text-align:left;margin-bottom:24px}
+.home .matches-heading h2{font-size:42px}
+.home .team-header{min-height:90px}
+.home .team-content{padding:20px 24px}
+.home .fixture-block+.fixture-block{margin-top:20px}
+.home .fixture-block-title{font-size:22px}
+.home .fixture-card{padding:18px 0;border-bottom:1px solid #e4e9ee}
+.home .fixture-card:last-child{border:0}
+.home .fixture-card p{margin:6px 0;color:var(--muted);font-size:14px;line-height:1.6}
+.home .fixture-card h4{margin:8px 0;font-size:18px}
+.home .fixture-card a{color:#075ec4;font-size:13px;font-weight:600}
+.home .fixture-grade{font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+.home .fixtures-message{border-radius:8px}
+.home .sponsor-inner{position:relative;padding:32px;gap:6px}
+.home .sponsor-enquiry{color:#075ec4;font-size:14px;font-weight:600;margin-top:12px}
+.home .site-footer a:hover{text-decoration:underline}
+.home .site-footer a{overflow-wrap:anywhere}
+.home a:focus-visible,.home button:focus-visible{outline:3px solid #e6ad3c;outline-offset:5px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:650px){
+ .home .brand{min-width:0}
+ .home .hero{min-height:0}
+ .home .hero-content{padding:52px 0}
+ .home .hero h1{font-size:58px}
+ .home .hero-lead{font-size:19px;max-width:290px;line-height:1.5}
+ .home .hero-actions{flex-direction:row;flex-wrap:wrap;gap:10px}
+ .home .btn{font-size:16px;padding:13px 17px}
+ .home .recruitment{flex-direction:column;align-items:flex-start;gap:22px;padding:30px 0}
+ .home .recruitment h2{font-size:31px}
+ .home .quick-section{grid-template-columns:1fr;padding:24px 0 30px;gap:12px}
+ .home .quick-card{padding:20px;column-gap:16px}
+ .home .matches-heading h2{font-size:34px}
+ .home .about h2{font-size:34px}
+ .home .team-header{gap:12px}
+ .home .grade-badge{padding:7px 10px}
+ .home section[id]{scroll-margin-top:92px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+.home .sponsor-name{text-decoration:none}
+.home .sponsor-name:hover{text-decoration:underline}

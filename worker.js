@@ -1,4 +1,6 @@
 const PLAYERS = {
+  neil: "08125d2e-9e52-4461-8208-a9203bbd99da",
+  thomas: "18c2a7c4-fd1c-44c2-8626-3d66e5562187",
   muliaga: "296b9211-2899-4886-b34a-82225c8b30d3",
   henry: "bdc00b12-d9c5-41fb-97d2-84a8a3668c07",
   kubilay: "c6f5009d-333d-462b-8997-ab1ab1107081",

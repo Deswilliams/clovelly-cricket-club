@@ -1,4 +1,5 @@
 const PLAYERS = {
+  girshwyn: "578aecbf-07f6-41d8-b2dd-631c41c956f5",
   gregory: "f47bbaff-7863-4752-b850-1f27225a4304",
   nathan: "3a54926b-c415-42f0-9dd0-e98c9a0ebfc8",
   rodney: "926c8c2c-b8f5-4296-9b88-1af41fbbb3f5",

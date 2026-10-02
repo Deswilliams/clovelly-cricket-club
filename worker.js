@@ -1,4 +1,7 @@
 const PLAYERS = {
+  muliaga: "296b9211-2899-4886-b34a-82225c8b30d3",
+  henry: "bdc00b12-d9c5-41fb-97d2-84a8a3668c07",
+  kubilay: "c6f5009d-333d-462b-8997-ab1ab1107081",
   girshwyn: "578aecbf-07f6-41d8-b2dd-631c41c956f5",
   gregory: "f47bbaff-7863-4752-b850-1f27225a4304",
   nathan: "3a54926b-c415-42f0-9dd0-e98c9a0ebfc8",

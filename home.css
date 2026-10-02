@@ -59,3 +59,54 @@
 
 .home .sponsor-name{text-decoration:none}
 .home .sponsor-name:hover{text-decoration:underline}
+
+/* A little more depth and a consistent navy-and-gold finish. */
+.home{background:#fcfdff}
+.home .site-header{box-shadow:0 3px 18px rgba(3,26,51,.12)}
+.home .hero{border-bottom:4px solid var(--gold)}
+.home .hero h1{text-shadow:0 3px 18px rgba(0,0,0,.16)}
+.home .hero-actions .btn,.home .recruitment .btn{border-radius:5px;box-shadow:0 5px 16px rgba(3,26,51,.12)}
+.home .btn-gold:hover{background:#f2bd51}
+.home .btn-outline:hover{background:rgba(255,255,255,.12);border-color:#fff}
+.home .quick-section{gap:20px}
+.home .quick-card{grid-template-columns:60px 1fr;padding:28px;border:1px solid #e0e7f0;border-radius:12px;background:linear-gradient(130deg,#fff 65%,#f4f8fd);box-shadow:0 6px 22px rgba(3,26,51,.045);transition:box-shadow .2s,border-color .2s}
+.home .quick-card:hover,.home .quick-card:focus-within{border-color:#b5cce6;box-shadow:0 10px 28px rgba(3,26,51,.09)}
+.home .quick-card .icon{width:60px;height:60px;border-radius:16px;background:linear-gradient(145deg,#0b355c,#031a33);color:#f3c363;border:1px solid #244969;box-shadow:0 5px 12px rgba(3,26,51,.15),inset 0 1px 0 rgba(255,255,255,.12)}
+.home .quick-card .icon svg{width:32px;height:32px;stroke-width:1.65}
+.home .quick-card h2{line-height:1.1}
+.home .quick-card a{color:#0b568f}
+.home .quick-card a:hover{text-decoration:underline;text-underline-offset:4px}
+.home .matches-section{background:#eef3f9;border-color:#e0e7f0}
+.home .team-fixtures{border-radius:12px;border-color:#dbe4ef;box-shadow:0 8px 24px rgba(3,26,51,.06)}
+.home .team-header{background:linear-gradient(115deg,#031a33,#0b416f);border-bottom:3px solid var(--gold)}
+.home .grade-badge{background:#f3c363;color:#102b47}
+.home .fixture-card a{text-decoration:none;display:inline-block;padding:7px 12px;border:1px solid #d3e1ef;border-radius:5px;background:#f5f9fd}
+.home .fixture-card a:hover{background:#e8f2fc;border-color:#9abbdc}
+.home .sponsor{background:#f4f7fb}
+.home .sponsor-enquiry{display:inline-block;padding:11px 18px;border:1px solid #bccfe2;border-radius:5px;text-decoration:none}
+.home .sponsor-enquiry:hover{background:#e8f0f8}
+.home .footer-bottom{border-top-color:#36516d}
+@media(max-width:650px){
+ .home .quick-section{gap:14px}
+ .home .quick-card{grid-template-columns:52px 1fr;padding:22px 18px;column-gap:16px}
+ .home .quick-card .icon{width:52px;height:52px;border-radius:14px}
+ .home .quick-card .icon svg{width:29px;height:29px}
+}
+@media(prefers-reduced-motion:reduce){.home .quick-card{transition:none}}
+
+/* Recruitment and sponsor presentation from the approved concept. */
+.home .recruitment{margin-top:28px;padding:28px 30px;background:linear-gradient(115deg,#e7f3ff,#dceeff);border:1px solid #d4e5f5;border-radius:12px;gap:32px}
+.home .recruitment .eyebrow{color:#155a96}
+.home .recruitment h2{line-height:1.15}
+.home .recruitment p:last-child{font-size:15px;line-height:1.65}
+.home .sponsor-inner{display:grid;grid-template-columns:1fr auto;gap:8px 36px;text-align:left;align-items:center;padding:32px 0}
+.home .sponsor-inner>span,.home .sponsor-name,.home .sponsor-inner>small{grid-column:1}
+.home .sponsor-enquiry{grid-column:2;grid-row:1/4;margin:0;background:var(--gold);border-color:var(--gold);color:#10213a}
+.home .sponsor-enquiry:hover{background:#f2bd51}
+.home .sponsor-inner strong{font-size:34px}
+@media(max-width:650px){
+ .home .recruitment{padding:24px 20px;gap:18px;margin-top:20px}
+ .home .recruitment h2{font-size:30px}
+ .home .sponsor-inner{grid-template-columns:1fr;padding:26px 0;text-align:center;justify-items:center;gap:8px}
+ .home .sponsor-enquiry{grid-column:1;grid-row:auto;margin-top:10px}
+}

@@ -1,4 +1,5 @@
 const PLAYERS = {
+  troy: "e875adeb-a941-4914-9ed5-5d3cbbce6454",
   liam: "d968e08c-1fa4-44af-bf2b-e61f123f3de1",
   haydn: "10853009-75e1-455e-8279-29dd9431cdeb",
   john_kertesz: "ed0119bc-49a2-4a79-9bc1-3ea8b1292a7f",

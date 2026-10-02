@@ -23,6 +23,10 @@
 .join-guide{padding:34px 0 36px}.join-guide-intro{max-width:780px}.join-guide h2{font-family:"Barlow Condensed",sans-serif;font-size:36px;text-transform:uppercase;margin:0 0 10px;color:#031a33}.join-guide p{font-size:14px;line-height:1.65;color:#536174;margin:0 0 18px}.join-guide-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:22px}.join-guide article{position:relative;padding:24px;background:#edf6ff;border:1px solid #dce7f2;border-radius:10px}.join-step{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:#e6ad3c;color:#031a33;font-weight:700;margin-bottom:14px}.join-guide h3{font-family:"Barlow Condensed",sans-serif;font-size:26px;text-transform:uppercase;color:#031a33;margin:0 0 10px}.join-guide article a{color:#075ec4;font-size:14px;font-weight:600;text-decoration:none}.join-guide article a:hover{text-decoration:underline}.join-guide a:focus-visible{outline:3px solid #e6ad3c;outline-offset:4px}
 @media(max-width:650px){.join-guide-grid{grid-template-columns:1fr}.join-guide{padding:28px 0}.join-guide h2{font-size:31px}}
 </style>
+<style>
+.club-sponsors{background:#edf6ff;padding:42px 0;border-top:1px solid #dce7f2}.sponsors-heading-row{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;margin-bottom:24px}.club-sponsors h2{font-family:"Barlow Condensed",sans-serif;text-transform:uppercase;color:#031a33;font-size:36px;margin:0 0 8px}.club-sponsors p{font-size:14px;line-height:1.65;color:#536174;margin:0}.sponsors-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,350px),1fr));gap:20px}.club-sponsor-card{display:flex;align-items:center;gap:28px;padding:28px;background:#fff;border:1px solid #dce7f2;border-radius:12px}.sponsor-wordmark{flex:0 1 360px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:118px;background:#031a33;color:#fff;border-radius:8px;text-decoration:none;padding:20px}.sponsor-wordmark strong{font-family:"Barlow Condensed",sans-serif;font-size:clamp(30px,4vw,46px);letter-spacing:.04em}.sponsor-wordmark span{color:#f3c363;font-size:12px;margin-top:6px}.sponsor-card-copy h3{font-family:"Barlow Condensed",sans-serif;font-size:27px;color:#031a33;margin:0 0 8px}.sponsor-card-copy a{display:inline-block;color:#075ec4;font-size:14px;font-weight:600;margin-top:14px;text-decoration:none}.club-sponsors a:hover{text-decoration:underline}.club-sponsors a:focus-visible{outline:3px solid #e6ad3c;outline-offset:4px}.club-sponsors .sponsors-invitation{margin-top:20px}
+@media(max-width:650px){.club-sponsors{padding:30px 0}.club-sponsors h2{font-size:31px}.club-sponsor-card{flex-direction:column;align-items:stretch;padding:22px;gap:20px}.sponsor-wordmark{flex:auto}.sponsors-heading-row .btn{width:100%}}
+</style>
 </head>
 
 <body class="home">
@@ -266,19 +270,14 @@
 
   <!-- SPONSOR -->
 
-  <section class="sponsor">
-
-    <div class="shell sponsor-inner">
-
-      <span>Proudly supported by</span>
-
-      <a class="sponsor-name" href="https://www.coltronics.com.au/" target="_blank" rel="noopener"><strong>COLTRONICS</strong></a>
-
-      <small>Delivering Excellence</small>
-      <a class="sponsor-enquiry" href="mailto:clovellycricketclub@gmail.com,tonype@iprimus.com.au,desw@hotmail.com,williambrookjbc@gmail.com?subject=Sponsoring%20Clovelly">Become a Sponsor →</a>
-
+  <section class="club-sponsors" id="sponsors" aria-labelledby="sponsors-heading">
+    <div class="shell">
+      <div class="sponsors-heading-row"><div><p class="eyebrow">Backing local cricket</p><h2 id="sponsors-heading">Our Sponsors</h2><p>Thank you to the businesses supporting Clovelly Cricket Club.</p></div><a class="btn btn-gold" href="mailto:clovellycricketclub@gmail.com,tonype@iprimus.com.au,desw@hotmail.com,williambrookjbc@gmail.com?subject=Sponsoring%20Clovelly">Become a Sponsor →</a></div>
+      <div class="sponsors-grid">
+        <article class="club-sponsor-card"><a class="sponsor-wordmark" href="https://www.coltronics.com.au/" target="_blank" rel="noopener" aria-label="Visit Coltronics website"><strong>COLTRONICS</strong><span>Delivering Excellence</span></a><div class="sponsor-card-copy"><h3>Coltronics</h3><p>Proud supporter of Clovelly Cricket Club.</p><a href="https://www.coltronics.com.au/" target="_blank" rel="noopener">Visit their website →</a></div></article>
+      </div>
+      <p class="sponsors-invitation">Interested in supporting local cricket? Contact us to discuss sponsorship opportunities.</p>
     </div>
-
   </section>
 
 </main>

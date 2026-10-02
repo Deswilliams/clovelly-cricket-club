@@ -1,4 +1,5 @@
 const PLAYERS = {
+  haydn: "10853009-75e1-455e-8279-29dd9431cdeb",
   john_kertesz: "ed0119bc-49a2-4a79-9bc1-3ea8b1292a7f",
   christopher: "f7df6d1e-9b90-433e-9b22-41bc638d0153",
   pedro: "7952fea2-0c1c-44b6-99d4-9aeb86e6c7ae",

@@ -29,6 +29,12 @@
 @media(max-width:980px){.volunteer-grid{grid-template-columns:1fr}.volunteer-top{min-height:0}.volunteer-card{padding:22px}.volunteer-stats{max-width:460px;margin-left:auto;margin-right:auto}.stats-panel{padding:22px}.people-tabs .shell{gap:22px}}
 @media(max-width:650px){.players-container{width:calc(100% - 28px);padding-top:28px}.players-hero{padding:34px 0}.players-hero h1{font-size:43px}.players-hero p{font-size:15px}.section-heading{font-size:31px}.records-panel{padding:22px 18px;gap:16px}.records-icon{width:36px}.records-title h2{font-size:27px}.stats-panel{padding:20px 14px}.stats-toolbar{align-items:stretch}.stats-control{width:100%;max-width:none}.people-tabs .shell{gap:18px}.people-tabs a{font-size:12px}.players-page section[id]{scroll-margin-top:96px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* Club records */
+.club-records{background:linear-gradient(120deg,#031a33,#0b355c);border-radius:14px;padding:28px;margin:0 0 38px;color:white}.club-records .section-heading{color:white;font-size:40px}.records-intro{color:#c9dced;font-size:14px;line-height:1.6;margin:10px 0 24px}.record-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.record-card{background:#fff;color:#0b2237;border:1px solid #dce7f2;border-radius:10px;padding:18px 14px}.record-card h3{font-family:'Barlow Condensed',sans-serif;font-size:25px;text-transform:uppercase;margin:0 0 12px}.record-list{list-style:none;padding:0;margin:0}.record-row{display:grid;grid-template-columns:26px minmax(0,1fr) auto;gap:10px;align-items:center;background:#f0f6fc;padding:9px 8px;margin:3px 0;font-size:12px;min-height:39px}.record-row a{color:#123755;text-decoration:none;line-height:1.4}.record-row a:hover{text-decoration:underline}.record-value{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}.rank-badge{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;color:#fff;background:#d4a02f;font-weight:700}.rank-2{background:#7e8c9b}.rank-3{background:#a96d46}.records-note{font-size:12px;line-height:1.6;color:#c9dced;margin:16px 0 22px}.records-extra{background:#fff;color:#0b2237;border-radius:10px;padding:20px;margin-top:22px}.records-extra h3,.partnership-heading{font-family:'Barlow Condensed',sans-serif;font-size:29px;text-transform:uppercase;margin:0 0 12px}.records-extra .tba{display:inline-block;font-family:Inter,sans-serif;font-size:11px;border:1px solid #d8a23a;border-radius:4px;padding:5px 10px;margin-left:12px;vertical-align:middle}.hat-tricks-wrap{overflow-x:auto}.hat-tricks-table{width:100%;border-collapse:collapse;font-size:12px;min-width:430px}.hat-tricks-table th{text-align:left;padding:12px;background:#edf5fc;color:#244460}.hat-tricks-table td{padding:18px;background:#f6faff;text-align:center;color:#536174}.partnership-heading{margin:24px 0 6px}.partnership-subtitle{font-size:12px;color:#c9dced;margin:0 0 12px}.partnership-band{display:grid;grid-template-columns:repeat(10,minmax(115px,1fr));overflow-x:auto;border-top:4px solid #e6ad3c;border-radius:7px;background:#e7f3ff;color:#0b2237}.partnership-tile{padding:15px 8px;text-align:center;border-right:1px solid #c8dced}.partnership-tile:last-child{border-right:0}.partnership-tile h4{font-family:'Barlow Condensed',sans-serif;font-size:16px;text-transform:uppercase;margin:0 0 12px;white-space:nowrap}.partnership-tile strong{display:block;font-family:'Barlow Condensed',sans-serif;font-size:26px}.partnership-tile span{display:block;font-size:11px;color:#536174;margin:6px 0}.partnership-tile p{font-size:11px;color:#536174;line-height:1.7;margin:12px 0 0}.records-scroll-note{font-size:11px;color:#c9dced;margin:10px 0 0}
+@media(max-width:980px){.record-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:650px){.club-records{padding:22px 14px}.record-grid{grid-template-columns:1fr}.club-records .section-heading{font-size:34px}.records-extra{padding:18px 12px}}
+
 </style>
 </head>
 
@@ -155,7 +161,7 @@
 </section>
 
 
-<section id="records" class="records-panel" aria-labelledby="records-heading"><svg class="records-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10v6a5 5 0 0 1-10 0zM7 5H3v3a4 4 0 0 0 4 4m10-7h4v3a4 4 0 0 1-4 4M12 14v5m-4 2h8m-7-2h6"/></svg><div><div class="records-title"><h2 class="section-heading" id="records-heading">Club Records</h2><span class="records-status">Being verified</span></div><p>We’re checking historical statistics before publishing club career records.</p></div></section>
+<section id="records" class="club-records" aria-labelledby="records-heading"><h2 class="section-heading" id="records-heading">Club Records</h2><p class="records-intro">Clovelly-only statistics • Top three among listed players</p><div class="record-grid"><article class="record-card"><h3>Most Matches</h3><ol class="record-list" id="record-matches"><li class="record-row"><span class="rank-badge rank-1">1</span><span>Loading…</span><strong class="record-value">—</strong></li><li class="record-row"><span class="rank-badge rank-2">2</span><span>Loading…</span><strong class="record-value">—</strong></li><li class="record-row"><span class="rank-badge rank-3">3</span><span>Loading…</span><strong class="record-value">—</strong></li></ol></article><article class="record-card"><h3>Most Runs</h3><ol class="record-list" id="record-runs"><li class="record-row"><span class="rank-badge rank-1">1</span><span>Loading…</span><strong class="record-value">—</strong></li><li class="record-row"><span class="rank-badge rank-2">2</span><span>Loading…</span><strong class="record-value">—</strong></li><li class="record-row"><span class="rank-badge rank-3">3</span><span>Loading…</span><strong class="record-value">—</strong></li></ol></article><article class="record-card"><h3>Most Wickets</h3><ol class="record-list" id="record-wickets"><li class="record-row"><span class="rank-badge rank-1">1</span><span>Loading…</span><strong class="record-value">—</strong></li><li class="record-row"><span class="rank-badge rank-2">2</span><span>Loading…</span><strong class="record-value">—</strong></li><li class="record-row"><span class="rank-badge rank-3">3</span><span>Loading…</span><strong class="record-value">—</strong></li></ol></article><article class="record-card"><h3>Most Catches</h3><ol class="record-list" id="record-catches"><li class="record-row"><span class="rank-badge rank-1">1</span><span>Loading…</span><strong class="record-value">—</strong></li><li class="record-row"><span class="rank-badge rank-2">2</span><span>Loading…</span><strong class="record-value">—</strong></li><li class="record-row"><span class="rank-badge rank-3">3</span><span>Loading…</span><strong class="record-value">—</strong></li></ol></article><article class="record-card"><h3>Highest Score</h3><ol class="record-list" id="record-highestScore"><li class="record-row"><span class="rank-badge rank-1">1</span><span>Loading…</span><strong class="record-value">—</strong></li><li class="record-row"><span class="rank-badge rank-2">2</span><span>Loading…</span><strong class="record-value">—</strong></li><li class="record-row"><span class="rank-badge rank-3">3</span><span>Loading…</span><strong class="record-value">—</strong></li></ol></article><article class="record-card"><h3>Best Bowling</h3><ol class="record-list" id="record-bestBowling"><li class="record-row"><span class="rank-badge rank-1">1</span><span>Loading…</span><strong class="record-value">—</strong></li><li class="record-row"><span class="rank-badge rank-2">2</span><span>Loading…</span><strong class="record-value">—</strong></li><li class="record-row"><span class="rank-badge rank-3">3</span><span>Loading…</span><strong class="record-value">—</strong></li></ol></article></div><p class="records-note" id="records-status" role="status">Loading Clovelly records…</p><section class="records-extra" aria-labelledby="hat-tricks-heading"><h3 id="hat-tricks-heading">Hat-tricks <span class="tba">TBA</span></h3><div class="hat-tricks-wrap"><table class="hat-tricks-table"><thead><tr><th scope="col">Bowler</th><th scope="col">Opponent</th><th scope="col">Date / Season</th><th scope="col">Grade</th></tr></thead><tbody><tr><td colspan="4">TBA — verified hat-tricks will be added here.</td></tr></tbody></table></div></section><h3 class="partnership-heading">Highest Partnerships</h3><p class="partnership-subtitle">Club records by wicket</p><div class="partnership-band" tabindex="0" role="region" aria-label="Highest partnerships from first to tenth wicket; scroll horizontally"><article class="partnership-tile"><h4>1st wicket</h4><strong>TBA</strong><span>Runs</span><p>Batters: TBA<br>Opponent: TBA<br>Date: TBA</p></article><article class="partnership-tile"><h4>2nd wicket</h4><strong>TBA</strong><span>Runs</span><p>Batters: TBA<br>Opponent: TBA<br>Date: TBA</p></article><article class="partnership-tile"><h4>3rd wicket</h4><strong>TBA</strong><span>Runs</span><p>Batters: TBA<br>Opponent: TBA<br>Date: TBA</p></article><article class="partnership-tile"><h4>4th wicket</h4><strong>TBA</strong><span>Runs</span><p>Batters: TBA<br>Opponent: TBA<br>Date: TBA</p></article><article class="partnership-tile"><h4>5th wicket</h4><strong>TBA</strong><span>Runs</span><p>Batters: TBA<br>Opponent: TBA<br>Date: TBA</p></article><article class="partnership-tile"><h4>6th wicket</h4><strong>TBA</strong><span>Runs</span><p>Batters: TBA<br>Opponent: TBA<br>Date: TBA</p></article><article class="partnership-tile"><h4>7th wicket</h4><strong>TBA</strong><span>Runs</span><p>Batters: TBA<br>Opponent: TBA<br>Date: TBA</p></article><article class="partnership-tile"><h4>8th wicket</h4><strong>TBA</strong><span>Runs</span><p>Batters: TBA<br>Opponent: TBA<br>Date: TBA</p></article><article class="partnership-tile"><h4>9th wicket</h4><strong>TBA</strong><span>Runs</span><p>Batters: TBA<br>Opponent: TBA<br>Date: TBA</p></article><article class="partnership-tile"><h4>10th wicket</h4><strong>TBA</strong><span>Runs</span><p>Batters: TBA<br>Opponent: TBA<br>Date: TBA</p></article></div><p class="records-scroll-note">Swipe or scroll sideways to see all ten wickets on smaller screens.</p></section>
  <section id="players" class="stats-panel">
 
   <h2 class="section-heading">Player Statistics</h2>
@@ -259,6 +265,28 @@ const players = [
   }
 ];
 
+const playerStatsRequests = new Map();
+function getPlayerStats(player, scope) {
+  const key = `${player.key}:${scope}`;
+  if (!playerStatsRequests.has(key)) {
+    const pending = (async () => {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 20000);
+      try {
+        const response = await fetch(`/api/player-stats?player=${player.key}&scope=${scope}`, { signal: controller.signal });
+        if (!response.ok) throw new Error("Statistics unavailable");
+        const stats = await response.json();
+        if (stats.error) throw new Error("Statistics unavailable");
+        return { ...player, ...stats };
+      } catch {
+        return { ...player, unavailable: true };
+      } finally { clearTimeout(timeout); }
+    })();
+    playerStatsRequests.set(key, pending);
+  }
+  return playerStatsRequests.get(key);
+}
+
 let playerData = [];
 let sortDirection = 1;
 let statsRequest = 0;
@@ -283,19 +311,7 @@ async function loadPlayerStats() {
     while (next < players.length) {
       const index = next++;
       const player = players[index];
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 20000);
-      try {
-        const response = await fetch(`/api/player-stats?player=${player.key}&scope=${scope}`, { signal: controller.signal });
-        if (!response.ok) throw new Error("Statistics unavailable");
-        const stats = await response.json();
-        if (stats.error) throw new Error("Statistics unavailable");
-        results[index] = { ...player, ...stats };
-      } catch {
-        results[index] = { ...player, unavailable: true };
-      } finally {
-        clearTimeout(timeout);
-      }
+      results[index] = await getPlayerStats(player, scope);
       if (requestId !== statsRequest) return;
       playerData = results.filter(Boolean);
       renderPlayers(filteredPlayers());
@@ -406,6 +422,61 @@ async function loadVolunteerStats() {
     console.error("Volunteer stats error:", error);
   }
 }
+
+
+function recordScore(player, field) {
+  if (player.unavailable) return null;
+  if (field === "bestBowling") {
+    const match = String(player.bestBowling ?? "").match(/^(\d+)\s*[-/]\s*(\d+)$/);
+    return match && Number(match[1]) > 0 ? [Number(match[1]), Number(match[2])] : null;
+  }
+  if (field === "highestScore") {
+    const match = String(player.highestScore ?? "").match(/^(\d+)(?:\*)?$/);
+    return match && Number(match[1]) > 0 ? [Number(match[1])] : null;
+  }
+  const value = player[field];
+  return typeof value === "number" && Number.isFinite(value) && value > 0 ? [value] : null;
+}
+function rankRecordPlayers(data, field) {
+  return data.map(player => ({ player, score: recordScore(player, field) }))
+    .filter(entry => entry.score)
+    .sort((a, b) => b.score[0] - a.score[0] || (field === "bestBowling" ? a.score[1] - b.score[1] : 0) || a.player.name.localeCompare(b.player.name));
+}
+function renderRecords(data) {
+  for (const field of ["matches", "runs", "wickets", "catches", "highestScore", "bestBowling"]) {
+    const ranked = rankRecordPlayers(data, field);
+    const list = document.getElementById(`record-${field}`);
+    list.replaceChildren();
+    let rank = 1;
+    for (let i = 0; i < 3; i++) {
+      const entry = ranked[i];
+      if (i > 0 && entry && (entry.score[0] !== ranked[i - 1].score[0] || (field === "bestBowling" && entry.score[1] !== ranked[i - 1].score[1]))) rank = i + 1;
+      const row = document.createElement("li"); row.className = "record-row";
+      const badge = document.createElement("span"); badge.className = `rank-badge rank-${rank}`; badge.textContent = entry ? rank : i + 1;
+      const name = document.createElement(entry ? "a" : "span"); name.textContent = entry ? entry.player.name : "TBA";
+      if (entry) { name.href = entry.player.profile; name.target = "_blank"; name.rel = "noopener"; }
+      const value = document.createElement("strong"); value.className = "record-value";
+      value.textContent = entry ? (field === "bestBowling" || field === "highestScore" ? entry.player[field] : formatCount(entry.player[field])) : "—";
+      row.append(badge, name, value); list.append(row);
+    }
+  }
+}
+async function loadClubRecords() {
+  const results = new Array(players.length); let next = 0;
+  async function loadNextRecord() {
+    while (next < players.length) {
+      const i = next++;
+      results[i] = await getPlayerStats(players[i], "clovelly");
+    }
+  }
+  await Promise.all(Array.from({ length: Math.min(6, players.length) }, loadNextRecord));
+  renderRecords(results);
+  const available = results.filter(player => !player.unavailable).length;
+  document.getElementById("records-status").textContent = available === 0
+    ? "Clovelly statistics are temporarily unavailable. Rankings will appear when data is available."
+    : `Based on available Clovelly statistics for ${available} of ${players.length} listed players. Historical records may be incomplete. Equal results share a rank; tied players are ordered by name. Up to three players shown per category.`;
+}
+loadClubRecords();
 
 loadVolunteerStats();
 document.getElementById("playerSearch").addEventListener("input", function() {

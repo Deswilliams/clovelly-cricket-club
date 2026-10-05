@@ -65,6 +65,7 @@
 .players-page .volunteer-photo .william-card-photo { object-position: 56% top; }
 .players-page .volunteer-card h3 { font-size: 29px; }
 .players-page .volunteer-role { color: #385775; max-width: 270px; font-size: 13px; }
+.players-page .volunteer-bio { color: #536174; font-size: 13px; line-height: 1.7; text-align: center; margin: 12px 0 22px; }
 .players-page .volunteer-stats { width: 100%; margin-top: auto; padding-top: 18px; }
 .players-page .volunteer-stat strong { color: #155a96; font-size: 28px; font-variant-numeric: tabular-nums; }
 .players-page .volunteer-link { border: 1px solid #d3e1ef; border-radius: 6px; padding: 10px; background: #f5f9fd; }

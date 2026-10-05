@@ -38,13 +38,15 @@ function normaliseRawFixtures(feeds) {
         clovellyOutcome:game.teams.find(t => t.id === team.id)?.outcome, playhqUrl:game.url})));
   });
 }
-function gameCard(game) {
+function gameCard(game, kind = 'result') {
   const date = matchDate(game);
   const dateText = date ? new Date(date).toLocaleString('en-AU', {timeZone:'Australia/Sydney', weekday:'short',day:'numeric',month:'short',hour:'numeric',minute:'2-digit'}) : 'Date to be confirmed';
   const labels = {WON:'Won',LOST:'Lost',DRAW:'Draw',DRAWN:'Draw',TIED:'Tie'};
   const status = game.status === 'FINAL' ? (labels[game.clovellyOutcome] || 'Final') : ({UPCOMING:'Upcoming',LIVE:'In progress',ABANDONED:'Abandoned',CANCELLED:'Cancelled'}[game.status] || 'See match details');
   const link = safeMatchUrl(game.playhqUrl);
-  return `<article class="fixture-card"><p class="fixture-grade">${escapeHTML(game.round)} · ${escapeHTML(status)}</p><h4>${escapeHTML(game.opponent || 'Opponent details on PlayHQ')}</h4><p>${escapeHTML(dateText)}</p>${game.venue ? `<p>${escapeHTML(game.venue)}</p>` : ''}${link ? `<a href="${escapeHTML(link)}" target="_blank" rel="noopener">Match details →</a>` : ''}</article>`;
+  const statusClass = game.clovellyOutcome === 'WON' ? ' won' : game.clovellyOutcome === 'LOST' ? ' lost' : '';
+  const dateMarkup = date ? `<time datetime="${new Date(date).toISOString()}">${escapeHTML(dateText)}</time>` : escapeHTML(dateText);
+  return `<article class="fixture-card fixture-${kind}"><p class="fixture-grade"><span class="fixture-round">${escapeHTML(game.round)}</span><span class="fixture-status${statusClass}">${escapeHTML(status)}</span></p><h4>${kind === 'next' ? 'Clovelly v ' : 'v '}${escapeHTML(game.opponent || 'Opponent details on PlayHQ')}</h4><p>${dateMarkup}</p>${game.venue ? `<p>${escapeHTML(game.venue)}</p>` : ''}${link ? `<a href="${escapeHTML(link)}" target="_blank" rel="noopener">Match details →</a>` : ''}</article>`;
 }
 async function loadClovellyFixtures() {
   const container = document.getElementById('live-fixtures');
@@ -63,7 +65,7 @@ async function loadClovellyFixtures() {
       const matches = games.filter(game => game.teamId === team.id || game.grade === team.grade);
       const upcoming = matches.filter(game => game.status === 'UPCOMING' && (!matchDate(game) || matchDate(game) >= Date.now() - 86400000)).sort((a,b) => matchDate(a)-matchDate(b)).slice(0,1);
       const results = matches.filter(game => game.status === 'FINAL').sort((a,b) => matchDate(b)-matchDate(a)).slice(0,1);
-      return `<article class="team-fixtures"><header class="team-header"><div><h3>Clovelly</h3><p>2026/27 season</p></div><span class="grade-badge">${team.grade}</span></header><div class="team-content"><div class="fixture-block"><h3 class="fixture-block-title">Next match</h3>${upcoming.length ? upcoming.map(gameCard).join('') : '<p class="no-matches">Check PlayHQ for the next scheduled match.</p>'}</div><div class="fixture-block"><h3 class="fixture-block-title">Latest result</h3>${results.length ? results.map(gameCard).join('') : '<p class="no-matches">Results will appear here after play.</p>'}</div></div></article>`;
+      return `<article class="team-fixtures"><header class="team-header"><div><h3>Clovelly</h3><p>2026/27 season</p></div><span class="grade-badge">${team.grade}</span></header><div class="team-content"><div class="fixture-block"><h3 class="fixture-block-title">Next match</h3>${upcoming.length ? upcoming.map(game => gameCard(game, 'next')).join('') : '<p class="no-matches">Check PlayHQ for the next scheduled match.</p>'}</div><div class="fixture-block"><h3 class="fixture-block-title">Latest result</h3>${results.length ? results.map(game => gameCard(game, 'result')).join('') : '<p class="no-matches">Results will appear here after play.</p>'}</div></div></article>`;
     }).join('')}</div>`;
   } catch {
     container.innerHTML = '<p class="fixtures-message">Follow our 2nd Grade and 4th Grade teams. <a href="https://ca.playhq.com/org/42286367-02b6-46d5-9a98-e744385639ef/games" target="_blank" rel="noopener">View fixtures &amp; results on PlayHQ →</a></p>';

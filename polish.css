@@ -1,0 +1,110 @@
+/* Shared finishing details for the homepage and volunteer portraits. */
+.home .hero-photo { background-position: 78% center; }
+.home .hero-shade { background: linear-gradient(90deg, #031a33 0%, rgba(3,26,51,.96) 28%, rgba(3,26,51,.70) 48%, rgba(3,26,51,.13) 72%, rgba(3,26,51,.05)); }
+.home .hero-content { padding: 66px 0 70px; }
+.home .hero h1 { font-size: clamp(56px,6.3vw,82px); line-height: 1; }
+.home .hero-lead { max-width: 560px; }
+.home .hero-meta { max-width: 550px; }
+.home .hero-actions .btn { min-height: 48px; }
+.home .join-guide { padding: 42px 0 24px; }
+.home .join-guide .eyebrow { color: #155a96; font-size: 15px; margin-bottom: 8px; }
+.home .join-guide-grid { gap: 20px; }
+.home .join-guide article { background: #f1f6fc; border-top: 3px solid var(--gold); padding: 24px; display: flex; flex-direction: column; }
+.home .join-guide article a { margin-top: auto; }
+.home .quick-section { padding: 12px 0 42px; gap: 16px; }
+.home .quick-card { border-top: 3px solid #155a96; padding: 22px 24px; grid-template-columns: 48px minmax(0,1fr); column-gap: 18px; align-items: start; }
+.home .quick-card .icon { width: 48px; height: 48px; border-radius: 12px; }
+.home .quick-card .icon svg { width: 28px; height: 28px; }
+.home .quick-card h2 { font-size: 25px; }
+.home .quick-card p { margin: 7px 0 10px; }
+.home .quick-card a { margin-top: 0; }
+.home .matches-section { padding: 44px 0 46px; }
+.home .matches-heading h2 { line-height: 1.05; }
+.home .matches-heading > p:last-child { line-height: 1.6; }
+.home .teams-grid { gap: 22px; }
+.home .team-header { min-height: 84px; padding: 22px 24px; }
+.home .team-header p { font-size: 14px; color: #c3dbf2; }
+.home .fixture-block-title { color: #244460; font-size: 20px; border: 0; padding-bottom: 12px; }
+.home .fixture-card { border: 0; padding: 0; }
+.home .fixture-card h4 { line-height: 1.3; }
+.home .fixture-next { background: #edf5fe; border: 1px solid #d5e4f3; border-left: 4px solid var(--gold); border-radius: 8px; padding: 20px; }
+.home .fixture-next h4 { font-family: 'Barlow Condensed',Arial,sans-serif; font-size: 28px; color: #031a33; margin: 10px 0 12px; }
+.home .fixture-next time { color: #183b5d; font-weight: 600; }
+.home .fixture-round { color: #536174; }
+.home .fixture-status { display: inline-block; border-radius: 20px; background: #fff; color: #214563; padding: 4px 9px; margin-left: 7px; font-size: 10px; font-weight: 700; }
+.home .fixture-status.won { background: #e0f2e9; color: #17633f; }
+.home .fixture-status.lost { background: #fce7e8; color: #9d2b36; }
+.home .fixture-result h4 { font-size: 17px; }
+.home .fixture-result .fixture-grade { font-size: 11px; }
+.home .fixture-result a { padding: 5px 10px; }
+.home .fixture-block + .fixture-block { border-top: 1px solid #e1e9f2; margin-top: 24px; padding-top: 20px; }
+.home .fixtures-source { line-height: 1.8; }
+.home .about { padding: 46px 0; gap: 48px; }
+.home .about h2 { font-size: 39px; line-height: 1.08; }
+.home .about > p { font-size: 15px; line-height: 1.8; margin-top: 8px; }
+.home .club-sponsors { background: #f1f6fc; padding: 40px 0; }
+.home .sponsors-heading-row { gap: 20px; }
+.home .btn-secondary { background: transparent; border: 1px solid #163f63; color: #163f63; border-radius: 5px; min-height: 48px; }
+.home .btn-secondary:hover { background: #e1ebf5; }
+.home .club-sponsor-card { border-top: 3px solid var(--gold); padding: 28px; gap: 32px; box-shadow: 0 6px 22px rgba(3,26,51,.04); }
+.home .sponsor-wordmark { flex: 0 1 340px; min-height: 132px; background: linear-gradient(135deg,#031a33,#0b355c); border: 1px solid #244969; }
+.home .sponsor-wordmark:hover { text-decoration: none; }
+.home .sponsor-tier { color: #385775; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 8px; }
+.home .sponsor-card-copy { min-width: 0; }
+.home .sponsor-card-copy h3 { font-size: 30px; }
+.home .sponsor-card-copy h3 a { color: #031a33; font: inherit; margin: 0; }
+.home .sponsors-invitation { font-size: 12px; }
+.players-page .volunteer-grid { gap: 22px; align-items: stretch; }
+.players-page .volunteer-card { border-top: 3px solid var(--gold); padding: 26px 22px 22px; display: flex; flex-direction: column; }
+.players-page .volunteer-top { flex-direction: column; gap: 18px; text-align: center; }
+.players-page .volunteer-top > div:last-child { min-height: 74px; }
+.players-page .volunteer-photo { position: relative; width: 144px; height: 144px; border-radius: 50%; border: 4px solid #fff; outline: 1px solid #d4e2ef; box-shadow: 0 5px 18px rgba(3,26,51,.10); overflow: hidden; }
+.players-page .volunteer-photo img { object-position: center top; }
+.players-page .volunteer-photo .tony-card-photo { position: absolute; height: 145%; width: auto; max-width: none; top: 0; left: 50%; transform: translateX(-52%); }
+.players-page .volunteer-photo .des-card-photo { object-position: 53% top; }
+.players-page .volunteer-photo .william-card-photo { object-position: 56% top; }
+.players-page .volunteer-card h3 { font-size: 29px; }
+.players-page .volunteer-role { color: #385775; max-width: 270px; font-size: 13px; }
+.players-page .volunteer-stats { width: 100%; margin-top: auto; padding-top: 18px; }
+.players-page .volunteer-stat strong { color: #155a96; font-size: 28px; font-variant-numeric: tabular-nums; }
+.players-page .volunteer-link { border: 1px solid #d3e1ef; border-radius: 6px; padding: 10px; background: #f5f9fd; }
+.players-page .volunteer-link:hover { background: #e8f2fc; }
+@media (max-width: 980px) and (min-width: 651px) {
+  .players-page .volunteer-grid { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 14px; }
+  .players-page .volunteer-card { padding: 24px 12px 18px; }
+  .players-page .volunteer-top > div:last-child { min-height: 96px; }
+  .players-page .volunteer-stat strong { font-size: 25px; }
+  .players-page .volunteer-stat span { font-size: 10px; }
+}
+@media (max-width: 650px) {
+  .home .hero-photo { background-position: 76% center; }
+  .home .hero-shade { background: linear-gradient(90deg,rgba(3,26,51,.98),rgba(3,26,51,.79) 55%,rgba(3,26,51,.44)); }
+  .home .hero-content { padding: 48px 0 52px; }
+  .home .hero h1 { font-size: clamp(48px,10.8vw,60px); }
+  .home .hero-meta { max-width: 310px; font-size: 13px; }
+  .home .hero-actions { flex-direction: row; flex-wrap: wrap; align-items: stretch; }
+  .home .hero-actions .btn { font-size: 15px; padding: 13px 16px; }
+  .home .join-guide { padding: 30px 0 22px; }
+  .home .join-guide-grid { gap: 14px; margin-top: 18px; }
+  .home .join-guide article { padding: 20px; }
+  .home .join-step { margin-bottom: 10px; }
+  .home .quick-section { padding: 0 0 30px; gap: 12px; }
+  .home .quick-card { padding: 20px 18px; column-gap: 14px; }
+  .home .quick-card h2 { font-size: 24px; }
+  .home .matches-section { padding: 32px 0; }
+  .home .team-header { padding: 20px; }
+  .home .team-content { padding: 20px; }
+  .home .fixture-next { padding: 16px; }
+  .home .fixture-next h4 { font-size: 26px; }
+  .home .fixture-status { margin-left: 4px; }
+  .home .fixtures-source a { display: block; margin-left: 0; }
+  .home .about { padding: 34px 0; gap: 16px; }
+  .home .about h2 { font-size: 33px; }
+  .home .club-sponsors { padding: 32px 0; }
+  .home .club-sponsor-card { padding: 22px; gap: 22px; }
+  .home .sponsor-wordmark { flex: auto; min-height: 118px; }
+  .players-page .volunteer-grid { grid-template-columns: 1fr; gap: 18px; }
+  .players-page .volunteer-top > div:last-child { min-height: 0; }
+  .players-page .volunteer-stats { margin-top: 22px; }
+  .players-page .volunteer-photo { width: 132px; height: 132px; }
+}

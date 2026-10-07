@@ -17,6 +17,6 @@ Opening the dashboard reads Cricket Australia's current completed Second Grade s
 
 Matches played count only a batting innings (excluding Did Not Bat) or at least one legal ball bowled. A team listing or fielding entry alone does not count. Names withheld in the public scorecard are excluded. Bowling is N/A for Not a bowler; Front line bowler and Fill in bowler retain their recorded bowling figures. Roles are shown separately and no composite fairness score is calculated.
 
-Default ordering is matches played descending, ties alphabetical. Optional sorts show batting innings, Top 5 innings and overs bowled. Overs are summed as balls and displayed in cricket notation. Multiple batting innings are counted separately; a match appearance is counted once.
+Default ordering is innings actually batted descending, then Top 5 innings descending, with remaining ties alphabetical. Bowling figures and categories do not affect this ranking. Optional sorts show matches played, Top 5 innings and overs bowled. Overs are summed as balls and displayed in cricket notation. Multiple batting innings are counted separately; a match appearance is counted once.
 
 The team identifier is the Cricket Australia Second Grade team ID `7d3bcbdf-9dd6-48ac-9540-446ad507b018`, distinct from the PlayHQ ID. Confirm this mapping and the season before reusing the dashboard next season. Upstream corrections become visible after cache expiry. An unavailable scorecard produces an error rather than a partial table.

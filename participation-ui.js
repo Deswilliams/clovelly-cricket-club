@@ -4,9 +4,9 @@ let participation;
 function message(text){el('message').textContent=text;}
 async function api(path,options={}){const response=await fetch(path,{credentials:'same-origin',cache:'no-store',...options});const body=await response.json();if(!response.ok){const error=new Error(body.error||'Unable to load participation.');error.status=response.status;throw error;}return body;}
 function draw(){
- const sort=el('sort').value;const players=[...participation.players].sort((a,b)=>sort==='name'?a.name.localeCompare(b.name):sort==='bowling'?(b.category==='Not a bowler'?-1:b.balls)-(a.category==='Not a bowler'?-1:a.balls)||a.name.localeCompare(b.name):b[sort]-a[sort]||a.name.localeCompare(b.name));
+ const sort=el('sort').value;const players=[...participation.players].sort((a,b)=>sort==='batting'?b.batted-a.batted||b.top-a.top||a.name.localeCompare(b.name):sort==='name'?a.name.localeCompare(b.name):sort==='bowling'?(b.category==='Not a bowler'?-1:b.balls)-(a.category==='Not a bowler'?-1:a.balls)||a.name.localeCompare(b.name):b[sort]-a[sort]||a.name.localeCompare(b.name));
  el('players').replaceChildren();
- for(const p of players){const row=document.createElement('tr');for(const v of [p.name,p.category,p.played,p.batted,p.top,p.middle,p.lower,p.gamesBowled??'N/A',p.overs??'N/A']){const td=document.createElement('td');td.textContent=String(v);if(v==='N/A')td.className='na';if(v==='Not set')td.className='category-unset';row.append(td);}el('players').append(row);}
+ for(const p of players){const row=document.createElement('tr');for(const v of [p.name,p.batted,p.top,p.middle,p.lower,p.played,p.category,p.gamesBowled??'N/A',p.overs??'N/A']){const td=document.createElement('td');td.textContent=String(v);if(v==='N/A')td.className='na';if(v==='Not set')td.className='category-unset';row.append(td);}el('players').append(row);}
  const missing=participation.players.filter(p=>p.category==='Not set').length;
  el('missing-roles').textContent=missing?`${missing} player${missing===1?' still needs':'s still need'} a bowling category. Recorded bowling figures are shown until the category is set.`:'';
 }

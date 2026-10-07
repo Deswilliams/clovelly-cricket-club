@@ -8,6 +8,9 @@ export function ballsFromOvers(overs) {
   return whole * 6 + balls;
 }
 export function oversFromBalls(balls) { return `${Math.floor(balls / 6)}.${balls % 6}`; }
+export function compareBattingOpportunity(a,b) {
+  return b.batted-a.batted || b.top-a.top || a.name.localeCompare(b.name);
+}
 export function aggregateParticipation(matches, roles = {}) {
   const players = new Map(); const games = [];
   for (const match of matches) {
@@ -38,7 +41,7 @@ export function aggregateParticipation(matches, roles = {}) {
       total.balls += balls;
     }
   }
-  return {matches:games.length,games,players:[...players.values()].map(p=>({...p,gamesBowled:p.category==='Not a bowler'?null:p.gamesBowled,overs:p.category==='Not a bowler'?null:oversFromBalls(p.balls)})).sort((a,b)=>b.played-a.played || a.name.localeCompare(b.name))};
+  return {matches:games.length,games,players:[...players.values()].map(p=>({...p,gamesBowled:p.category==='Not a bowler'?null:p.gamesBowled,overs:p.category==='Not a bowler'?null:oversFromBalls(p.balls)})).sort(compareBattingOpportunity)};
 }
 async function readJson(url) {
   const response=await fetch(url,{headers:{Accept:'application/json'},cf:{cacheTtl:300,cacheEverything:true}});

@@ -2,9 +2,13 @@
   "name": "clovelly-cricket-club",
   "main": "worker.js",
   "compatibility_date": "2026-09-09",
+  "kv_namespaces": [
+    { "binding": "PARTICIPATION_STORE", "id": "4826fd8d2389495d9956c04e6b529c14" }
+  ],
   "assets": {
     "directory": ".",
     "binding": "ASSETS",
     "run_worker_first": ["/api/*"]
   }
 }
+

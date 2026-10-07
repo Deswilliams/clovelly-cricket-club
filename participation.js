@@ -1,3 +1,4 @@
+import initialRoles from './participation-roles.js';
 const TEAM_ID = '7d3bcbdf-9dd6-48ac-9540-446ad507b018';
 const API = 'https://grassrootsapiproxy.cricket.com.au';
 export const BOWLING_CATEGORIES = ['Front line bowler', 'Fill in bowler', 'Not a bowler'];
@@ -95,7 +96,7 @@ export async function participationRequest(request,env){
       const scorecards=[];
       // Fetch in batches to respect Worker subrequest and service limits.
       for(let i=0;i<complete.length;i+=5){scorecards.push(...await Promise.all(complete.slice(i,i+5).map(m=>readJson(`${API}/scores/matches/${m.id}?responseModifier=includeScorecard&jsconfig=eccn%3Atrue`))));}
-      const roles=await env.PARTICIPATION_STORE.get('second-grade-roles','json')||{};
+      const roles={...initialRoles,...(await env.PARTICIPATION_STORE.get('second-grade-roles','json')||{})};
       return respond({...aggregateParticipation(scorecards,roles),role:auth?.role==='admin'?'admin':'public',updated:new Date().toISOString()});
     }catch{return respond({error:'The latest scorecards could not be loaded. Please try again shortly.'},502);}
   }

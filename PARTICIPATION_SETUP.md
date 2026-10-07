@@ -4,9 +4,9 @@ The public page is `selection.html`; detailed figures are in the public `partici
 
 ## One-time Cloudflare setup
 
-1. Create a Workers KV namespace and bind it to the existing Worker as `PARTICIPATION_STORE`. Store its real namespace ID in a `kv_namespaces` entry in `wrangler.jsonc`; keep the existing asset and API settings.
+1. The `clovelly-participation` Workers KV namespace has been created. Its real namespace ID is recorded in `wrangler.jsonc` with binding `PARTICIPATION_STORE`, so source deployments keep the connection. The dashboard binding can also be added under the existing Worker's Settings > Bindings.
 2. Set the Worker secret `PARTICIPATION_ADMIN_CODE` to a strong administrator password. No squad password is required. Never put its value in this repository. If `PARTICIPATION_ACCESS_CODE` was previously added, it is unused and can be removed.
-3. Deploy the updated Worker and assets using the existing Cloudflare deployment. Use Admin sign in on the dashboard and choose each player's bowling category. The choices are saved in KV under `second-grade-roles` and persist across deployments.
+3. Deploy the updated Worker and assets using the existing Cloudflare deployment. The 16 confirmed bowling categories in `participation-roles.js` are used automatically. Use Admin sign in on the dashboard to change categories if needed. Changes are saved in KV under `second-grade-roles`, override the initial values and persist across deployments.
 4. Share the dashboard URL through the existing squad WhatsApp group. New players need their category set once; existing categories need changing only if their bowling role changes.
 
 The dashboard needs the KV binding to load figures and saved roles. Viewing is public and does not require the administrator secret or a cookie. Login and role edits require the administrator password; edits also require a signed, HttpOnly, Secure cookie expiring after 12 hours and a matching Origin. Anonymous visitors cannot edit roles.

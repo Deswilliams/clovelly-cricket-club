@@ -19,4 +19,6 @@ Matches played count only a batting innings (excluding Did Not Bat) or at least 
 
 Default ordering is innings actually batted descending, then Top 5 innings descending, with remaining ties alphabetical. Bowling figures and categories do not affect this ranking. Optional sorts show matches played, Top 5 innings and overs bowled. Overs are summed as balls and displayed in cricket notation. Multiple batting innings are counted separately; a match appearance is counted once.
 
+% batted is matches with at least one batting innings divided by matches played, so a two-innings match is counted once in both parts of that percentage. Order bands show an innings count and the percentage of total innings batted: positions 1–5, 6–8 and 9–11. With no matches/innings the percentage is unavailable, shown as a dash. Positions 12+ or missing positions are reported separately, not folded into 9–11. Whole-percent rounding can make band percentages add to 99% or 101%.
+
 The team identifier is the Cricket Australia Second Grade team ID `7d3bcbdf-9dd6-48ac-9540-446ad507b018`, distinct from the PlayHQ ID. Confirm this mapping and the season before reusing the dashboard next season. Upstream corrections become visible after cache expiry. An unavailable scorecard produces an error rather than a partial table.

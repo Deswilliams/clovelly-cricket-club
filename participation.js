@@ -23,7 +23,7 @@ export function aggregateParticipation(matches, roles = {}) {
     for (const player of team.players) {
       if (!named(player.name) || !player.participantId) continue;
       const id = player.participantId;
-      if (!players.has(id)) players.set(id,{id,name:player.name,category:roles[id] || 'Not set',played:0,batted:0,top:0,middle:0,lower:0,positionsMissing:0,gamesBowled:0,balls:0});
+      if (!players.has(id)) players.set(id,{id,name:player.name,category:roles[id] || 'Not set',played:0,batted:0,gamesBatted:0,top:0,middle:0,lower:0,otherPositions:0,positionsMissing:0,gamesBowled:0,balls:0});
       const total = players.get(id);
       const bats = battingInnings.flatMap(i=>i.batting||[]).filter(b=>b.participantId===id && b.dismissalType !== 'Did Not Bat');
       const bowls = bowlingInnings.flatMap(i=>i.bowling||[]).filter(b=>b.participantId===id);
@@ -31,17 +31,19 @@ export function aggregateParticipation(matches, roles = {}) {
       // Club definition: a team listing, DNB entry or fielding entry alone is not a played match.
       if (bats.length || balls > 0) total.played++;
       total.batted += bats.length;
+      if (bats.length) total.gamesBatted++;
       for(const bat of bats) {
         if (bat.batOrder >= 1 && bat.batOrder <= 5) total.top++;
         else if (bat.batOrder >= 6 && bat.batOrder <= 8) total.middle++;
-        else if (bat.batOrder >= 9) total.lower++;
+        else if (bat.batOrder >= 9 && bat.batOrder <= 11) total.lower++;
+        else if (bat.batOrder >= 12) total.otherPositions++;
         else total.positionsMissing++;
       }
       if (balls > 0) total.gamesBowled++;
       total.balls += balls;
     }
   }
-  return {matches:games.length,games,players:[...players.values()].map(p=>({...p,gamesBowled:p.category==='Not a bowler'?null:p.gamesBowled,overs:p.category==='Not a bowler'?null:oversFromBalls(p.balls)})).sort(compareBattingOpportunity)};
+  return {matches:games.length,games,players:[...players.values()].map(p=>({...p,battedPct:p.played?p.gamesBatted/p.played:null,topPct:p.batted?p.top/p.batted:null,middlePct:p.batted?p.middle/p.batted:null,lowerPct:p.batted?p.lower/p.batted:null,gamesBowled:p.category==='Not a bowler'?null:p.gamesBowled,overs:p.category==='Not a bowler'?null:oversFromBalls(p.balls)})).sort(compareBattingOpportunity)};
 }
 async function readJson(url) {
   const response=await fetch(url,{headers:{Accept:'application/json'},cf:{cacheTtl:300,cacheEverything:true}});

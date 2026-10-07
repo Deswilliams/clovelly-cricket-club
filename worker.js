@@ -1,3 +1,5 @@
+import { participationRequest } from './participation.js';
+
 const PLAYERS = {
   mark_isemonger: "f9b99ff1-d999-4115-a2a3-230e43b1e669",
   troy: "e875adeb-a941-4914-9ed5-5d3cbbce6454",
@@ -34,6 +36,8 @@ const PLAYERS = {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    const participation = await participationRequest(request, env);
+    if (participation) return participation;
 
     // =========================================================
     // PLAYER STATISTICS
@@ -400,3 +404,4 @@ export default {
     return env.ASSETS.fetch(request);
   },
 };
+

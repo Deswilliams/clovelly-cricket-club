@@ -1,15 +1,15 @@
 # Second Grade participation
 
-The public page is `selection.html`; detailed figures are in the squad-only `participation.html` dashboard. Existing player statistics and fixture routes are preserved.
+The public page is `selection.html`; detailed figures are in the public `participation.html` dashboard. Existing player statistics and fixture routes are preserved.
 
 ## One-time Cloudflare setup
 
 1. Create a Workers KV namespace and bind it to the existing Worker as `PARTICIPATION_STORE`. Store its real namespace ID in a `kv_namespaces` entry in `wrangler.jsonc`; keep the existing asset and API settings.
-2. Set two different, strong Worker secrets: `PARTICIPATION_ACCESS_CODE` for squad read-only access and `PARTICIPATION_ADMIN_CODE` for the club administrator. Never put their values in this repository.
-3. Deploy the updated Worker and assets using the existing Cloudflare deployment. Open the dashboard with the administrator code and choose each player's bowling category. The choices are saved in KV under `second-grade-roles` and persist across deployments.
-4. Share the dashboard URL and member code through the existing squad WhatsApp group. New players need their category set once; existing categories need changing only if their bowling role changes.
+2. Set the Worker secret `PARTICIPATION_ADMIN_CODE` to a strong administrator password. No squad password is required. Never put its value in this repository. If `PARTICIPATION_ACCESS_CODE` was previously added, it is unused and can be removed.
+3. Deploy the updated Worker and assets using the existing Cloudflare deployment. Use Admin sign in on the dashboard and choose each player's bowling category. The choices are saved in KV under `second-grade-roles` and persist across deployments.
+4. Share the dashboard URL through the existing squad WhatsApp group. New players need their category set once; existing categories need changing only if their bowling role changes.
 
-Until both secrets and the KV binding exist, the participation API returns a setup message and reveals no player figures. The dashboard stores access in a signed, HttpOnly, Secure cookie expiring after 12 hours. Member access cannot edit roles.
+The dashboard needs the KV binding to load figures and saved roles. Viewing is public and does not require the administrator secret or a cookie. Login and role edits require the administrator password; edits also require a signed, HttpOnly, Secure cookie expiring after 12 hours and a matching Origin. Anonymous visitors cannot edit roles.
 
 ## Automatic updates
 

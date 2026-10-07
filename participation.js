@@ -61,26 +61,26 @@ async function makeToken(role,secret){const payload=toBase64(enc.encode(JSON.str
 async function session(request,env){
   try {const token=(request.headers.get('Cookie')||'').split(';').map(s=>s.trim()).find(s=>s.startsWith('ccc_participation='))?.slice(18);if(!token)return null;
     const [payload,sig]=token.split('.');const ok=await crypto.subtle.verify('HMAC',await key(env.PARTICIPATION_ADMIN_CODE),fromBase64(sig),enc.encode(payload));
-    const claims=JSON.parse(new TextDecoder().decode(fromBase64(payload)));return ok && claims.expires>Date.now() && ['admin','member'].includes(claims.role)?claims:null;
+    const claims=JSON.parse(new TextDecoder().decode(fromBase64(payload)));return ok && claims.expires>Date.now() && claims.role==='admin'?claims:null;
   } catch {return null;}
 }
 export async function participationRequest(request,env){
   const path=new URL(request.url).pathname;
   if(!path.startsWith('/api/participation'))return null;
-  // Fail closed until club-only access and durable role storage have been configured.
-  if(!env.PARTICIPATION_ACCESS_CODE || !env.PARTICIPATION_ADMIN_CODE || !env.PARTICIPATION_STORE)return respond({error:'The club dashboard is being set up. Please check back soon.'},503);
+  if(!env.PARTICIPATION_STORE)return respond({error:'The club dashboard is being set up. Please check back soon.'},503);
+  if(path==='/api/participation-logout' && request.method==='POST')return respond({ok:true},200,{'Set-Cookie':'ccc_participation=; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=0'});
   if(path==='/api/participation-login' && request.method==='POST'){
+    if(!env.PARTICIPATION_ADMIN_CODE)return respond({error:'Administrator access is being set up.'},503);
     if(request.headers.get('Origin')!==new URL(request.url).origin)return respond({error:'Request rejected'},403);
     let body;try{body=await request.json();}catch{return respond({error:'Invalid request'},400);}
     if(typeof body.code!=='string' || body.code.length>256)return respond({error:'Invalid access code'},401);
-    const admin=await equalSecret(body.code,env.PARTICIPATION_ADMIN_CODE);const member=await equalSecret(body.code,env.PARTICIPATION_ACCESS_CODE);
-    if(!admin&&!member)return respond({error:'That access code was not recognised.'},401);
-    return respond({role:admin?'admin':'member'},200,{'Set-Cookie':`ccc_participation=${await makeToken(admin?'admin':'member',env.PARTICIPATION_ADMIN_CODE)}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=43200`});
+    const admin=await equalSecret(body.code,env.PARTICIPATION_ADMIN_CODE);
+    if(!admin)return respond({error:'That admin password was not recognised.'},401);
+    return respond({role:'admin'},200,{'Set-Cookie':`ccc_participation=${await makeToken('admin',env.PARTICIPATION_ADMIN_CODE)}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=43200`});
   }
-  const auth=await session(request,env);if(!auth)return respond({error:'Enter your club access code.'},401);
-  if(path==='/api/participation-logout' && request.method==='POST')return respond({ok:true},200,{'Set-Cookie':'ccc_participation=; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=0'});
+  const auth=env.PARTICIPATION_ADMIN_CODE?await session(request,env):null;
   if(path==='/api/participation-roles' && request.method==='PUT'){
-    if(auth.role!=='admin' || request.headers.get('Origin')!==new URL(request.url).origin)return respond({error:'Club administrator access is required.'},403);
+    if(auth?.role!=='admin' || request.headers.get('Origin')!==new URL(request.url).origin)return respond({error:'Club administrator access is required.'},403);
     let body;try{body=await request.json();}catch{return respond({error:'Invalid role list'},400);}
     const entries=Object.entries(body.roles||{});if(entries.length>200 || entries.some(([id,role])=>!/^[a-f0-9-]{36}$/.test(id)||!BOWLING_CATEGORIES.includes(role)))return respond({error:'Choose a valid bowling category for each player.'},400);
     const existing=await env.PARTICIPATION_STORE.get('second-grade-roles','json')||{};
@@ -96,7 +96,7 @@ export async function participationRequest(request,env){
       // Fetch in batches to respect Worker subrequest and service limits.
       for(let i=0;i<complete.length;i+=5){scorecards.push(...await Promise.all(complete.slice(i,i+5).map(m=>readJson(`${API}/scores/matches/${m.id}?responseModifier=includeScorecard&jsconfig=eccn%3Atrue`))));}
       const roles=await env.PARTICIPATION_STORE.get('second-grade-roles','json')||{};
-      return respond({...aggregateParticipation(scorecards,roles),role:auth.role,updated:new Date().toISOString()});
+      return respond({...aggregateParticipation(scorecards,roles),role:auth?.role==='admin'?'admin':'public',updated:new Date().toISOString()});
     }catch{return respond({error:'The latest scorecards could not be loaded. Please try again shortly.'},502);}
   }
   return respond({error:'Not found'},404);

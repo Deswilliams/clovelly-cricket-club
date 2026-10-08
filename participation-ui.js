@@ -52,12 +52,12 @@ function draw(){
  drawSort();
  el('players').replaceChildren();
  for(const p of players){
-  const row=node('tr');const values=[p.name,p.played,p.batted,percentage(p.battedPct),orderFigure(p.top,p.topPct),orderFigure(p.middle,p.middlePct),orderFigure(p.lower,p.lowerPct),p.category,p.gamesBowled??'N/A',p.overs??'N/A',average(p.seasonBattingAverage),careerAverage(p),count(p.seasonWickets),careerWickets(p),p.battingRank];
-  values.forEach((v,index)=>{const td=node(index===0?'th':'td','',v);if(index===0)td.setAttribute('scope','row');
+  const row=node('tr');const values=[p.battingRank,p.name,p.played,p.batted,percentage(p.battedPct),orderFigure(p.top,p.topPct),orderFigure(p.middle,p.middlePct),orderFigure(p.lower,p.lowerPct),p.category,p.gamesBowled??'N/A',p.overs??'N/A',average(p.seasonBattingAverage),careerAverage(p),count(p.seasonWickets),careerWickets(p)];
+  values.forEach((v,columnIndex)=>{const index=columnIndex-1;const td=node(index===0?'th':'td','',v);if(index===0)td.setAttribute('scope','row');
    if(v==='N/A')td.className='na';
    if(index===1)td.className='matches-cell';
    if(index===2)td.className='innings-cell';
-   if(index===14)td.className='rank-cell';
+   if(columnIndex===0)td.className='rank-cell';
    if(index>=3&&index<=6){td.className=`metric-cell ${['batted','top','middle','lower'][index-3]}-cell`;const track=node('span','table-track'),fill=node('span','table-fill');const pct=[p.battedPct,p.topPct,p.middlePct,p.lowerPct][index-3];track.setAttribute('aria-hidden','true');if(index===3&&p.battedPct===1){fill.className+=' fully-batted';td.className+=' batted-complete';td.textContent='';td.append(node('span','complete-batting-badge','100%'));td.setAttribute('aria-label',`100% — batted in all ${p.played} ${p.played===1?'match':'matches'} played`);}fill.style.width=`${Math.max(0,Math.min(100,(pct??0)*100))}%`;track.append(fill);td.append(track);}
    if(index===7){td.className='role-cell';td.textContent='';td.append(node('span',`table-role ${p.category==='Front line bowler'?'role-front':p.category==='Fill in bowler'?'role-fill':p.category==='Not set'?'category-unset':'role-none'}`,p.category));}
    if([6,9,11].includes(index))td.className+=' group-end';

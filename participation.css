@@ -19,3 +19,10 @@
 @media(min-width:980px){#participation-table{min-width:0}#participation-table thead th,#participation-table tbody td{padding-left:7px;padding-right:7px}}
 
 #participation-table tbody .matches-cell{font-size:17px;font-weight:700;color:#031a33}
+
+/* Every heading sorts in both directions; new visits start with batting opportunity. */
+.participation-tools #sort-summary{font-size:13px;color:#536174;margin:0}.participation-tools #reset-sort{padding:8px 12px}.participation-tools #edit{margin-left:auto}
+#participation-table .column-sort{position:relative;display:block;width:100%;min-height:44px;padding:0 12px 0 0;border:0;background:transparent;font:inherit;font-weight:600;line-height:1.4;color:inherit;cursor:pointer;text-align:right}
+#participation-table .group-headings th:first-child .column-sort,#participation-table .role-column-header .column-sort{text-align:left}
+.column-sort .sort-icon{position:absolute;right:0;top:50%;transform:translateY(-50%);font-size:11px;opacity:.7}#participation-table th[aria-sort="ascending"] .sort-icon,#participation-table th[aria-sort="descending"] .sort-icon{color:#f5c45c;opacity:1}
+#participation-table .column-sort:hover{color:#f5c45c}#participation-table .column-sort:focus-visible{outline:2px solid #f5c45c;outline-offset:3px;border-radius:3px}

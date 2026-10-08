@@ -1,6 +1,7 @@
 const el=id=>document.getElementById(id);
 const categories=['Front line bowler','Fill in bowler','Not a bowler'];
 let participation;
+let sortColumn='batted',sortDirection='desc';
 function message(text){el('message').textContent=text;}
 const percentage=value=>value===null||value===undefined?'—':`${Math.round(value*100)}%`;
 const orderFigure=(count,pct)=>`${count} (${percentage(pct)})`;
@@ -20,8 +21,35 @@ async function loadCareer(data){
  if(participation===data){draw();const failed=data.players.filter(p=>p.careerStatus==='unavailable').length;el('career-status').textContent=failed?`Career figures are temporarily unavailable for ${failed} player${failed===1?'':'s'}. Season and participation figures are still shown.`:'';}
 }
 function node(tag,className,text){const element=document.createElement(tag);if(className)element.className=className;if(text!==undefined)element.textContent=String(text);return element;}
+function valueForSort(player,column){
+ if(column==='balls'||column==='gamesBowled')return player.category==='Not a bowler'?null:player[column];
+ if(column==='careerBattingAverage'||column==='careerWickets')return player.careerStatus==='loaded'?player[column]:null;
+ if(column==='category'&&player.category==='Not set')return null;
+ return player[column]??null;
+}
+function comparePlayers(a,b){
+ const x=valueForSort(a,sortColumn),y=valueForSort(b,sortColumn);
+ if(x===null||y===null)return x===y?a.name.localeCompare(b.name):x===null?1:-1;
+ const sign=sortDirection==='desc'?-1:1;
+ const difference=typeof x==='string'?x.localeCompare(y):x-y;
+ return sign*difference||(sortColumn==='batted'?sign*(a.top-b.top):0)||a.name.localeCompare(b.name);
+}
+function drawSort(){
+ const textColumn=sortColumn==='name'||sortColumn==='category';
+ for(const button of document.querySelectorAll('.column-sort')){
+  const key=button.dataset.sort,active=key===sortColumn,isText=key==='name'||key==='category';
+  button.parentElement.setAttribute('aria-sort',active?(sortDirection==='desc'?'descending':'ascending'):'none');
+  button.querySelector('.sort-icon').textContent=active?(sortDirection==='desc'?'↓':'↑'):'↕';
+  const next=active?(sortDirection==='desc'?'asc':'desc'):isText?'asc':'desc';
+  button.setAttribute('aria-label',`Sort ${button.dataset.label}: ${isText?(next==='asc'?'A to Z':'Z to A'):(next==='desc'?'most first':'least first')}`);
+ }
+ const label=sortColumn==='batted'?'Batting opportunity':document.querySelector(`[data-sort="${sortColumn}"]`).dataset.label;
+ el('sort-summary').textContent=`${label} · ${textColumn?(sortDirection==='asc'?'A–Z':'Z–A'):(sortDirection==='desc'?'most first':'least first')}`;
+ el('reset-sort').hidden=sortColumn==='batted'&&sortDirection==='desc';
+}
 function draw(){
- const sort=el('sort').value;const players=[...participation.players].sort((a,b)=>sort==='batting'?b.batted-a.batted||b.top-a.top||a.name.localeCompare(b.name):sort==='name'?a.name.localeCompare(b.name):sort==='bowling'?(b.category==='Not a bowler'?-1:b.balls)-(a.category==='Not a bowler'?-1:a.balls)||a.name.localeCompare(b.name):b[sort]-a[sort]||a.name.localeCompare(b.name));
+ const players=[...participation.players].sort(comparePlayers);
+ drawSort();
  el('players').replaceChildren();
  for(const p of players){
   const row=node('tr');const values=[p.name,p.played,p.batted,percentage(p.battedPct),orderFigure(p.top,p.topPct),orderFigure(p.middle,p.middlePct),orderFigure(p.lower,p.lowerPct),p.category,p.gamesBowled??'N/A',p.overs??'N/A',average(p.seasonBattingAverage),careerAverage(p),count(p.seasonWickets),careerWickets(p)];
@@ -52,7 +80,12 @@ async function load(){
 el('admin-login').addEventListener('click',()=>{el('access').hidden=!el('access').hidden;if(!el('access').hidden)el('code').focus();});
 el('login').addEventListener('submit',async event=>{event.preventDefault();const button=event.currentTarget.querySelector('button');button.disabled=true;try{await api('/api/participation-login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code:el('code').value})});el('code').value='';await load();}catch(e){message(e.message);}finally{button.disabled=false;}});
 el('logout').addEventListener('click',async()=>{try{await api('/api/participation-logout',{method:'POST'});location.reload();}catch(e){message(e.message);}});
-el('sort').addEventListener('change',draw);
+document.querySelectorAll('.column-sort').forEach(button=>button.addEventListener('click',()=>{
+ const column=button.dataset.sort;
+ sortDirection=sortColumn===column?(sortDirection==='desc'?'asc':'desc'):(column==='name'||column==='category'?'asc':'desc');
+ sortColumn=column;if(participation)draw();
+}));
+el('reset-sort').addEventListener('click',()=>{sortColumn='batted';sortDirection='desc';if(participation)draw();});
 el('edit').addEventListener('click',()=>{el('role-list').replaceChildren();for(const player of [...participation.players].sort((a,b)=>a.name.localeCompare(b.name))){const label=document.createElement('label');label.textContent=player.name;const select=document.createElement('select');select.dataset.player=player.id;select.required=true;const empty=document.createElement('option');empty.value='';empty.textContent='Choose role';select.append(empty);for(const category of categories){const o=document.createElement('option');o.value=category;o.textContent=category;select.append(o);}select.value=categories.includes(player.category)?player.category:'';label.append(select);el('role-list').append(label);}el('roles').hidden=false;el('roles').scrollIntoView({behavior:'smooth',block:'start'});});
 el('cancel').addEventListener('click',()=>el('roles').hidden=true);
 el('roles').addEventListener('submit',async event=>{event.preventDefault();const button=event.currentTarget.querySelector('button[type="submit"]');button.disabled=true;try{const roles=Object.fromEntries([...el('role-list').querySelectorAll('select')].map(s=>[s.dataset.player,s.value]));await api('/api/participation-roles',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({roles})});el('roles').hidden=true;await load();message('Bowling roles saved.');}catch(e){message(e.message);}finally{button.disabled=false;}});

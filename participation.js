@@ -10,7 +10,7 @@ export function ballsFromOvers(overs) {
 }
 export function oversFromBalls(balls) { return `${Math.floor(balls / 6)}.${balls % 6}`; }
 export function compareBattingOpportunity(a,b) {
-  return b.batted-a.batted || b.top-a.top || a.name.localeCompare(b.name);
+  return b.batted-a.batted || b.top-a.top || b.middle-a.middle || a.name.localeCompare(b.name);
 }
 const dismissedTypes=new Set(['bowled','caught','caught and bowled','lbw','run out','stumped','hit wicket','obstructing the field','obstructing field','timed out','retired out','handled the ball','hit the ball twice']);
 export function dismissalCount(bat){

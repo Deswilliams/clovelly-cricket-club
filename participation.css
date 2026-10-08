@@ -31,3 +31,8 @@
 .batted-cell .table-fill.fully-batted{background:#2c9658}.top-cell .table-fill{background:#9bddb4}
 #participation-table .heading-top .column-sort:hover,#participation-table .heading-top .column-sort .sort-icon{color:#174a2e}
 #participation-table .heading-lower .column-sort:hover,#participation-table .heading-lower .column-sort .sort-icon{color:#742b32}
+
+/* Make full batting participation easy to spot without hiding the order bands. */
+#participation-table tbody .batted-complete{background:#ddf3e5}#participation-table tbody tr:hover .batted-complete{background:#cdebd8}
+.complete-batting-badge{display:inline-block;background:#21663c;color:#fff;font-size:12px;font-weight:700;line-height:1.4;padding:3px 7px;border-radius:5px}
+.batted-complete .table-track{height:7px;background:#b9dfc7;margin-top:7px}.batted-complete .table-fill{height:7px}

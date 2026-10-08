@@ -1,5 +1,10 @@
 import initialRoles from './participation-roles.js';
-const TEAM_ID = '7d3bcbdf-9dd6-48ac-9540-446ad507b018';
+export const GRADES = Object.freeze({
+  '2': {label:'Second Grade',teamId:'7d3bcbdf-9dd6-48ac-9540-446ad507b018'},
+  '4': {label:'Fourth Grade',teamId:'cd4c7f2e-a7e8-4e13-8444-01f920495256'}
+});
+const TEAM_ID=GRADES['2'].teamId;
+const SEASON_ID='69609582-ba37-4440-9d1e-a38fa912f6d3';
 const API = 'https://grassrootsapiproxy.cricket.com.au';
 export const BOWLING_CATEGORIES = ['Front line bowler', 'Fill in bowler', 'Not a bowler'];
 const named = name => typeof name === 'string' && name.trim() && !name.includes('*');
@@ -20,15 +25,15 @@ export function dismissalCount(bat){
  return null;
 }
 const statNumber=value=>value!==null&&value!==undefined&&value!==''&&Number.isFinite(Number(value))&&Number(value)>=0?Number(value):null;
-export function aggregateParticipation(matches, roles = {}) {
+export function aggregateParticipation(matches, roles = {}, teamId = TEAM_ID) {
   const players = new Map(); const games = [];
   for (const match of matches) {
     if (match.status !== 'COMPLETED') continue;
-    const team = match.teams?.find(t => t.id === TEAM_ID);
+    const team = match.teams?.find(t => t.id === teamId);
     if (!team || !Array.isArray(team.players) || !Array.isArray(match.innings)) throw new Error('Incomplete scorecard');
-    const battingInnings = match.innings.filter(i => i.battingTeamId === TEAM_ID);
-    const bowlingInnings = match.innings.filter(i => i.battingTeamId !== TEAM_ID);
-    games.push({round: match.round?.name, date: match.matchSchedule?.[0]?.startDateTime?.slice(0,10), opponent: match.teams.find(t=>t.id!==TEAM_ID)?.displayName, source: `https://play.cricket.com.au/match/${match.id}`});
+    const battingInnings = match.innings.filter(i => i.battingTeamId === teamId);
+    const bowlingInnings = match.innings.filter(i => i.battingTeamId !== teamId);
+    games.push({round: match.round?.name, date: match.matchSchedule?.[0]?.startDateTime?.slice(0,10), opponent: match.teams.find(t=>t.id!==teamId)?.displayName, source: `https://play.cricket.com.au/match/${match.id}`});
     for (const player of team.players) {
       if (!named(player.name) || !player.participantId) continue;
       const id = player.participantId;
@@ -96,8 +101,8 @@ export async function participationRequest(request,env){
     if(auth?.role!=='admin' || request.headers.get('Origin')!==new URL(request.url).origin)return respond({error:'Club administrator access is required.'},403);
     let body;try{body=await request.json();}catch{return respond({error:'Invalid role list'},400);}
     const entries=Object.entries(body.roles||{});if(entries.length>200 || entries.some(([id,role])=>!/^[a-f0-9-]{36}$/.test(id)||!BOWLING_CATEGORIES.includes(role)))return respond({error:'Choose a valid bowling category for each player.'},400);
-    const existing=await env.PARTICIPATION_STORE.get('second-grade-roles','json')||{};
-    await env.PARTICIPATION_STORE.put('second-grade-roles',JSON.stringify({...existing,...Object.fromEntries(entries)}));
+    const existing=await env.PARTICIPATION_STORE.get('player-roles','json')||{};
+    await env.PARTICIPATION_STORE.put('player-roles',JSON.stringify({...existing,...Object.fromEntries(entries)}));
     return respond({ok:true});
   }
   if(path==='/api/participation-career' && request.method==='GET'){
@@ -110,15 +115,18 @@ export async function participationRequest(request,env){
     }catch{return respond({error:'Career statistics are temporarily unavailable.'},502);}
   }
   if(path==='/api/participation' && request.method==='GET'){
+    const grade=new URL(request.url).searchParams.get('grade')||'2';
+    if(!Object.hasOwn(GRADES,grade))return respond({error:'Choose Second Grade or Fourth Grade.'},400);
+    const config=GRADES[grade];
     try{
-      const list=await readJson(`${API}/scores/teams/${TEAM_ID}/matches?jsconfig=eccn%3Atrue`);
+      const list=await readJson(`${API}/scores/teams/${config.teamId}/matches?seasonId=${SEASON_ID}&jsconfig=eccn%3Atrue`);
       if(!Array.isArray(list.matches))throw new Error('Incomplete fixtures');
       const complete=list.matches.filter(m=>m.status==='COMPLETED').sort((a,b)=>(a.matchSchedule?.[0]?.startDateTime||'').localeCompare(b.matchSchedule?.[0]?.startDateTime||''));
       const scorecards=[];
       // Fetch in batches to respect Worker subrequest and service limits.
       for(let i=0;i<complete.length;i+=5){scorecards.push(...await Promise.all(complete.slice(i,i+5).map(m=>readJson(`${API}/scores/matches/${m.id}?responseModifier=includeScorecard&jsconfig=eccn%3Atrue`))));}
-      const roles={...initialRoles,...(await env.PARTICIPATION_STORE.get('second-grade-roles','json')||{})};
-      return respond({...aggregateParticipation(scorecards,roles),role:auth?.role==='admin'?'admin':'public',updated:new Date().toISOString()});
+      const roles={...initialRoles,...(await env.PARTICIPATION_STORE.get('second-grade-roles','json')||{}),...(await env.PARTICIPATION_STORE.get('player-roles','json')||{})};
+      return respond({...aggregateParticipation(scorecards,roles,config.teamId),grade,gradeLabel:config.label,role:auth?.role==='admin'?'admin':'public',updated:new Date().toISOString()});
     }catch{return respond({error:'The latest scorecards could not be loaded. Please try again shortly.'},502);}
   }
   return respond({error:'Not found'},404);

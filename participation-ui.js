@@ -1,6 +1,9 @@
 const el=id=>document.getElementById(id);
 const categories=['Front line bowler','Fill in bowler','Not a bowler'];
 let participation;
+const gradeLabels={'2':'Second Grade','4':'Fourth Grade'};
+let currentGrade=new URLSearchParams(location.search).get('grade')==='4'?'4':'2';
+let loadVersion=0;
 let sortColumn='batted',sortDirection='desc';
 function message(text){el('message').textContent=text;}
 const percentage=value=>value===null||value===undefined?'—':`${Math.round(value*100)}%`;
@@ -70,14 +73,23 @@ function draw(){
  el('other-positions').textContent=ungrouped.length?`Innings outside the order bands or with no recorded position: ${ungrouped.map(p=>`${p.name}: ${p.otherPositions+p.positionsMissing}`).join('; ')}. These remain in total batting innings but are not counted in the three order bands.`:'';
 }
 async function load(){
- message('Loading completed scorecards…');
- try{participation=await api('/api/participation');el('access').hidden=true;el('dashboard').hidden=false;el('logout').hidden=participation.role!=='admin';el('admin-login').hidden=participation.role==='admin';el('edit').hidden=participation.role!=='admin';
+ const version=++loadVersion,grade=currentGrade,label=gradeLabels[grade];
+ participation=undefined;el('dashboard').hidden=true;el('roles').hidden=true;el('access').hidden=true;
+ el('grade-heading').textContent=`${label} · 2026/27`;el('summary-grade').textContent=`${label} · 2026/27`;
+ document.querySelectorAll('[data-grade]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.grade===grade)));
+ document.querySelector('.participation-table-wrap').setAttribute('aria-label',`${label} participation table`);
+ message(`Loading ${label} scorecards…`);
+ try{const data=await api(`/api/participation?grade=${grade}`);if(version!==loadVersion)return;participation=data;el('access').hidden=true;el('dashboard').hidden=false;el('logout').hidden=participation.role!=='admin';el('admin-login').hidden=participation.role==='admin';el('edit').hidden=participation.role!=='admin';
    el('summary-matches').textContent=String(participation.matches);el('summary-players').textContent=String(participation.players.filter(p=>p.played>0).length);el('summary-innings').textContent=String(participation.players.reduce((sum,p)=>sum+p.batted,0));
    el('coverage').textContent=`${participation.matches} completed matches · ${participation.players.length} named players`;
    el('updated').textContent=`Checked ${new Date(participation.updated).toLocaleString('en-AU',{dateStyle:'medium',timeStyle:'short',timeZone:'Australia/Sydney'})}`;
-   el('match-list').replaceChildren();for(const g of participation.games){const li=document.createElement('li');const a=document.createElement('a');a.href=g.source;a.target='_blank';a.rel='noopener';a.textContent=`${g.round} · ${g.date} · ${g.opponent}`;li.append(a);el('match-list').append(li);}draw();el('career-status').textContent=participation.players.length?'Loading career figures…':'';void loadCareer(participation);message(participation.matches?'':'No completed Second Grade scorecards are available yet.');
- }catch(e){el('dashboard').hidden=true;el('access').hidden=true;el('logout').hidden=true;el('admin-login').hidden=false;message(e.message);}
+   el('match-list').replaceChildren();for(const g of participation.games){const li=document.createElement('li');const a=document.createElement('a');a.href=g.source;a.target='_blank';a.rel='noopener';a.textContent=`${g.round} · ${g.date} · ${g.opponent}`;li.append(a);el('match-list').append(li);}draw();el('career-status').textContent=participation.players.length?'Loading career figures…':'';void loadCareer(participation);message(participation.matches?'':`No completed ${label} scorecards are available yet.`);
+ }catch(e){if(version!==loadVersion)return;el('dashboard').hidden=true;el('access').hidden=true;el('logout').hidden=true;el('admin-login').hidden=false;message(e.message);}
 }
+document.querySelectorAll('[data-grade]').forEach(button=>button.addEventListener('click',()=>{
+ const grade=button.dataset.grade;if(grade===currentGrade)return;currentGrade=grade;sortColumn='batted';sortDirection='desc';
+ const url=new URL(location.href);if(grade==='2')url.searchParams.delete('grade');else url.searchParams.set('grade',grade);history.replaceState(null,'',url);void load();
+}));
 el('admin-login').addEventListener('click',()=>{el('access').hidden=!el('access').hidden;if(!el('access').hidden)el('code').focus();});
 el('login').addEventListener('submit',async event=>{event.preventDefault();const button=event.currentTarget.querySelector('button');button.disabled=true;try{await api('/api/participation-login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code:el('code').value})});el('code').value='';await load();}catch(e){message(e.message);}finally{button.disabled=false;}});
 el('logout').addEventListener('click',async()=>{try{await api('/api/participation-logout',{method:'POST'});location.reload();}catch(e){message(e.message);}});

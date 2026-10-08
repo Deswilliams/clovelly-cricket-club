@@ -12,6 +12,14 @@ export function oversFromBalls(balls) { return `${Math.floor(balls / 6)}.${balls
 export function compareBattingOpportunity(a,b) {
   return b.batted-a.batted || b.top-a.top || a.name.localeCompare(b.name);
 }
+const dismissedTypes=new Set(['bowled','caught','caught and bowled','lbw','run out','stumped','hit wicket','obstructing the field','obstructing field','timed out','retired out','handled the ball','hit the ball twice']);
+export function dismissalCount(bat){
+ const type=String(bat.dismissalType||'').trim().toLowerCase();
+ if(dismissedTypes.has(type))return 1;
+ if(['not out','retired hurt','retired not out','retired','absent hurt','did not bat'].includes(type)||bat.dismissalTypeId===1)return 0;
+ return null;
+}
+const statNumber=value=>value!==null&&value!==undefined&&value!==''&&Number.isFinite(Number(value))&&Number(value)>=0?Number(value):null;
 export function aggregateParticipation(matches, roles = {}) {
   const players = new Map(); const games = [];
   for (const match of matches) {
@@ -24,7 +32,7 @@ export function aggregateParticipation(matches, roles = {}) {
     for (const player of team.players) {
       if (!named(player.name) || !player.participantId) continue;
       const id = player.participantId;
-      if (!players.has(id)) players.set(id,{id,name:player.name,category:roles[id] || 'Not set',played:0,batted:0,gamesBatted:0,top:0,middle:0,lower:0,otherPositions:0,positionsMissing:0,gamesBowled:0,balls:0});
+      if (!players.has(id)) players.set(id,{id,name:player.name,category:roles[id] || 'Not set',played:0,batted:0,gamesBatted:0,top:0,middle:0,lower:0,otherPositions:0,positionsMissing:0,gamesBowled:0,balls:0,seasonRuns:0,seasonDismissals:0,seasonWickets:0,seasonBattingIncomplete:false,seasonBowlingIncomplete:false});
       const total = players.get(id);
       const bats = battingInnings.flatMap(i=>i.batting||[]).filter(b=>b.participantId===id && b.dismissalType !== 'Did Not Bat');
       const bowls = bowlingInnings.flatMap(i=>i.bowling||[]).filter(b=>b.participantId===id);
@@ -34,6 +42,9 @@ export function aggregateParticipation(matches, roles = {}) {
       total.batted += bats.length;
       if (bats.length) total.gamesBatted++;
       for(const bat of bats) {
+        const runs=statNumber(bat.runsScored),out=dismissalCount(bat);
+        if(runs===null||out===null)total.seasonBattingIncomplete=true;
+        total.seasonRuns+=runs??0;total.seasonDismissals+=out??0;
         if (bat.batOrder >= 1 && bat.batOrder <= 5) total.top++;
         else if (bat.batOrder >= 6 && bat.batOrder <= 8) total.middle++;
         else if (bat.batOrder >= 9 && bat.batOrder <= 11) total.lower++;
@@ -42,9 +53,10 @@ export function aggregateParticipation(matches, roles = {}) {
       }
       if (balls > 0) total.gamesBowled++;
       total.balls += balls;
+      for(const bowl of bowls){const wickets=statNumber(bowl.wicketsTaken);if(wickets===null)total.seasonBowlingIncomplete=true;total.seasonWickets+=wickets??0;}
     }
   }
-  return {matches:games.length,games,players:[...players.values()].map(p=>({...p,battedPct:p.played?p.gamesBatted/p.played:null,topPct:p.batted?p.top/p.batted:null,middlePct:p.batted?p.middle/p.batted:null,lowerPct:p.batted?p.lower/p.batted:null,gamesBowled:p.category==='Not a bowler'?null:p.gamesBowled,overs:p.category==='Not a bowler'?null:oversFromBalls(p.balls)})).sort(compareBattingOpportunity)};
+  return {matches:games.length,games,players:[...players.values()].map(p=>({...p,seasonBattingAverage:!p.seasonBattingIncomplete&&p.seasonDismissals?p.seasonRuns/p.seasonDismissals:null,seasonWickets:p.seasonBowlingIncomplete?null:p.seasonWickets,battedPct:p.played?p.gamesBatted/p.played:null,topPct:p.batted?p.top/p.batted:null,middlePct:p.batted?p.middle/p.batted:null,lowerPct:p.batted?p.lower/p.batted:null,gamesBowled:p.category==='Not a bowler'?null:p.gamesBowled,overs:p.category==='Not a bowler'?null:oversFromBalls(p.balls)})).sort(compareBattingOpportunity)};
 }
 async function readJson(url) {
   const response=await fetch(url,{headers:{Accept:'application/json'},cf:{cacheTtl:300,cacheEverything:true}});
@@ -87,6 +99,15 @@ export async function participationRequest(request,env){
     const existing=await env.PARTICIPATION_STORE.get('second-grade-roles','json')||{};
     await env.PARTICIPATION_STORE.put('second-grade-roles',JSON.stringify({...existing,...Object.fromEntries(entries)}));
     return respond({ok:true});
+  }
+  if(path==='/api/participation-career' && request.method==='GET'){
+    const id=new URL(request.url).searchParams.get('player');
+    if(!/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/.test(id||''))return respond({error:'Invalid player'},400);
+    try{
+      const data=await readJson(`${API}/participants/players/${id}/summary-statistics?seasonId=&organisationId=&matchTypeId=&jsconfig=eccn%3Atrue`);
+      if(!data||typeof data!=='object'||(!('battingAverage' in data)&&!('bowlingWickets' in data)))throw new Error('Incomplete statistics');
+      return respond({id,battingAverage:statNumber(data.battingAverage),wickets:statNumber(data.bowlingWickets)});
+    }catch{return respond({error:'Career statistics are temporarily unavailable.'},502);}
   }
   if(path==='/api/participation' && request.method==='GET'){
     try{

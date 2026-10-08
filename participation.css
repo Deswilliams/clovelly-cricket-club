@@ -17,3 +17,5 @@
 #participation-table tbody th{white-space:normal;overflow-wrap:break-word}#participation-table .metric-cell{min-width:0}#participation-table .role-cell{min-width:0}
 #participation-table .group-headings th[rowspan]{position:sticky;left:0;z-index:2}
 @media(min-width:980px){#participation-table{min-width:0}#participation-table thead th,#participation-table tbody td{padding-left:7px;padding-right:7px}}
+
+#participation-table tbody .matches-cell{font-size:17px;font-weight:700;color:#031a33}

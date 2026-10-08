@@ -56,7 +56,7 @@ export function aggregateParticipation(matches, roles = {}) {
       for(const bowl of bowls){const wickets=statNumber(bowl.wicketsTaken);if(wickets===null)total.seasonBowlingIncomplete=true;total.seasonWickets+=wickets??0;}
     }
   }
-  return {matches:games.length,games,players:[...players.values()].map(p=>({...p,seasonBattingAverage:!p.seasonBattingIncomplete&&p.seasonDismissals?p.seasonRuns/p.seasonDismissals:null,seasonWickets:p.seasonBowlingIncomplete?null:p.seasonWickets,battedPct:p.played?p.gamesBatted/p.played:null,topPct:p.batted?p.top/p.batted:null,middlePct:p.batted?p.middle/p.batted:null,lowerPct:p.batted?p.lower/p.batted:null,gamesBowled:p.category==='Not a bowler'?null:p.gamesBowled,overs:p.category==='Not a bowler'?null:oversFromBalls(p.balls)})).sort(compareBattingOpportunity)};
+  return {matches:games.length,games,players:[...players.values()].map(p=>({...p,seasonBattingAverage:!p.seasonBattingIncomplete&&p.seasonDismissals?p.seasonRuns/p.seasonDismissals:null,seasonWickets:p.seasonBowlingIncomplete?null:p.seasonWickets,battedPct:p.played?p.gamesBatted/p.played:null,topPct:p.batted?p.top/p.batted:null,middlePct:p.batted?p.middle/p.batted:null,lowerPct:p.batted?p.lower/p.batted:null,gamesBowled:p.category==='Not a bowler'?null:p.gamesBowled,overs:p.category==='Not a bowler'?null:oversFromBalls(p.balls)})).sort(compareBattingOpportunity).map((p,index)=>({...p,battingRank:index+1}))};
 }
 async function readJson(url) {
   const response=await fetch(url,{headers:{Accept:'application/json'},cf:{cacheTtl:300,cacheEverything:true}});

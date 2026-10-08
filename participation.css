@@ -36,3 +36,7 @@
 #participation-table tbody .batted-complete{background:#ddf3e5}#participation-table tbody tr:hover .batted-complete{background:#cdebd8}
 .complete-batting-badge{display:inline-block;background:#21663c;color:#fff;font-size:12px;font-weight:700;line-height:1.4;padding:3px 7px;border-radius:5px}
 .batted-complete .table-track{height:7px;background:#b9dfc7;margin-top:7px}.batted-complete .table-fill{height:7px}
+
+/* Keep a stable batting opportunity rank on the right, within the desktop table. */
+#participation-table .number-column{width:6.0833333%}#participation-table .rank-column{width:4%}
+#participation-table tbody .rank-cell{font-size:16px;font-weight:700;color:#17344f;border-left:1px solid #d5e1ed;background:#edf3f9}

@@ -40,11 +40,11 @@ function drawSort(){
   const key=button.dataset.sort,active=key===sortColumn,isText=key==='name'||key==='category';
   button.parentElement.setAttribute('aria-sort',active?(sortDirection==='desc'?'descending':'ascending'):'none');
   button.querySelector('.sort-icon').textContent=active?(sortDirection==='desc'?'↓':'↑'):'↕';
-  const next=active?(sortDirection==='desc'?'asc':'desc'):isText?'asc':'desc';
-  button.setAttribute('aria-label',`Sort ${button.dataset.label}: ${isText?(next==='asc'?'A to Z':'Z to A'):(next==='desc'?'most first':'least first')}`);
+  const next=active?(sortDirection==='desc'?'asc':'desc'):(isText||key==='battingRank')?'asc':'desc';
+  button.setAttribute('aria-label',`Sort ${button.dataset.label}: ${isText?(next==='asc'?'A to Z':'Z to A'):(key==='battingRank'?(next==='asc'?'highest rank first':'lowest rank first'):(next==='desc'?'most first':'least first'))}`);
  }
  const label=sortColumn==='batted'?'Batting opportunity':document.querySelector(`[data-sort="${sortColumn}"]`).dataset.label;
- el('sort-summary').textContent=`${label} · ${textColumn?(sortDirection==='asc'?'A–Z':'Z–A'):(sortDirection==='desc'?'most first':'least first')}`;
+ el('sort-summary').textContent=`${label} · ${textColumn?(sortDirection==='asc'?'A–Z':'Z–A'):(sortColumn==='battingRank'?(sortDirection==='asc'?'highest rank first':'lowest rank first'):(sortDirection==='desc'?'most first':'least first'))}`;
  el('reset-sort').hidden=sortColumn==='batted'&&sortDirection==='desc';
 }
 function draw(){
@@ -52,11 +52,12 @@ function draw(){
  drawSort();
  el('players').replaceChildren();
  for(const p of players){
-  const row=node('tr');const values=[p.name,p.played,p.batted,percentage(p.battedPct),orderFigure(p.top,p.topPct),orderFigure(p.middle,p.middlePct),orderFigure(p.lower,p.lowerPct),p.category,p.gamesBowled??'N/A',p.overs??'N/A',average(p.seasonBattingAverage),careerAverage(p),count(p.seasonWickets),careerWickets(p)];
+  const row=node('tr');const values=[p.name,p.played,p.batted,percentage(p.battedPct),orderFigure(p.top,p.topPct),orderFigure(p.middle,p.middlePct),orderFigure(p.lower,p.lowerPct),p.category,p.gamesBowled??'N/A',p.overs??'N/A',average(p.seasonBattingAverage),careerAverage(p),count(p.seasonWickets),careerWickets(p),p.battingRank];
   values.forEach((v,index)=>{const td=node(index===0?'th':'td','',v);if(index===0)td.setAttribute('scope','row');
    if(v==='N/A')td.className='na';
    if(index===1)td.className='matches-cell';
    if(index===2)td.className='innings-cell';
+   if(index===14)td.className='rank-cell';
    if(index>=3&&index<=6){td.className=`metric-cell ${['batted','top','middle','lower'][index-3]}-cell`;const track=node('span','table-track'),fill=node('span','table-fill');const pct=[p.battedPct,p.topPct,p.middlePct,p.lowerPct][index-3];track.setAttribute('aria-hidden','true');if(index===3&&p.battedPct===1){fill.className+=' fully-batted';td.className+=' batted-complete';td.textContent='';td.append(node('span','complete-batting-badge','100%'));td.setAttribute('aria-label',`100% — batted in all ${p.played} ${p.played===1?'match':'matches'} played`);}fill.style.width=`${Math.max(0,Math.min(100,(pct??0)*100))}%`;track.append(fill);td.append(track);}
    if(index===7){td.className='role-cell';td.textContent='';td.append(node('span',`table-role ${p.category==='Front line bowler'?'role-front':p.category==='Fill in bowler'?'role-fill':p.category==='Not set'?'category-unset':'role-none'}`,p.category));}
    if([6,9,11].includes(index))td.className+=' group-end';
@@ -82,7 +83,7 @@ el('login').addEventListener('submit',async event=>{event.preventDefault();const
 el('logout').addEventListener('click',async()=>{try{await api('/api/participation-logout',{method:'POST'});location.reload();}catch(e){message(e.message);}});
 document.querySelectorAll('.column-sort').forEach(button=>button.addEventListener('click',()=>{
  const column=button.dataset.sort;
- sortDirection=sortColumn===column?(sortDirection==='desc'?'asc':'desc'):(column==='name'||column==='category'?'asc':'desc');
+ sortDirection=sortColumn===column?(sortDirection==='desc'?'asc':'desc'):(column==='name'||column==='category'||column==='battingRank'?'asc':'desc');
  sortColumn=column;if(participation)draw();
 }));
 el('reset-sort').addEventListener('click',()=>{sortColumn='batted';sortDirection='desc';if(participation)draw();});
